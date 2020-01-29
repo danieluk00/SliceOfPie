@@ -1,0 +1,17 @@
+.list-group-item {
+    background: #ffc13b;
+    color: black;
+    margin-bottom: 5px;
+    border-radius: 10px;
+  }
+
+  .pay-item {
+    background: #f7f7f7;
+    color: black;
+    margin-bottom: 5px;
+    border-radius: 4px;
+  }
+
+.strikeout {
+  text-decoration: line-through;
+}

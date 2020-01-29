@@ -1,0 +1,133 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Split the pie</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+        <link rel="stylesheet" href="styles/styles.css">
+        <link rel="stylesheet" href="styles/list.css">
+
+    </head>
+    <body onload="loadPeople();">
+
+        <div class="container">
+            <ul class="nav nav-pills nav-fill">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#" id="statemenu" onclick="clickMenu('statemenu')">Summary</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" id="historymenu" onclick="clickMenu('historymenu')">History</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" id="addmenu" onclick="clickMenu('addmenu')">Add+</a>
+                </li>
+              </ul>
+
+              <div class="body-container">
+
+                <div id="stateofplay">
+                    <div id="summarydiv">
+                        <h1 id="summarytitle">Summary</h1>
+                        <div class="stateofplayuser statediv">
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle" type="button" id="dropDownSummary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Who are you?
+                                </button>
+                                <div class="dropdown-menu" id="stateofplayuserselect" aria-labelledby="dropdownMenuButton">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="statediv1 statediv d-none">
+                            <h4>Your slice of the pie:</h4>
+                            <h1 id="total">TBC</h1>
+                        </div>
+                        <div class="statediv2 statediv d-none">
+                            <h4>You've paid:</h4>
+                            <h1 id="usertotal">TBC</h1>
+                        </div>
+                        <div class="statediv3 statediv d-none">
+                            <h4 id="userowedcopy">You are owed:</h4>
+                            <h1 id="userowed">TBC</h1>
+                        </div>
+                        <button type="submit" class="btn btn-warning btn-block" id="settleup" onclick="settleup()">Settle up</button> 
+                    </div>
+                    <div id="howtosettle" class="d-none">
+                        <h1 id="settletitle">How to settle</h1>
+                        <div class="settlediv">
+                        </div>
+                        <button type="submit" class="btn btn-warning btn-block" style="margin-top: 20px;" id="settleup" onclick="backToSummary()">Back to summary</button> 
+                    </div>
+                </div>
+
+                <div id="history" class="d-none">
+                    <h1>Expense history</h1>
+                    <div id="expense-list">
+
+                    </div>
+                </div>
+
+                <div id="addexpense" class="d-none">
+                    <div id="addexpensemain">
+                        <h1>Add expense</h1>
+                        <form id ="addexpenseform">
+                            <div class="form-group">
+                                <label for="formGroupExampleInput">Title</label>
+                                <input type="text" class="form-control" id="expense-title" placeholder="e.g. Train tickets" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="formGroupExampleInput2">Value in £</label>
+                                <input type="text" class="form-control" id="expense-value" placeholder="£" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="formGroupExampleInput2">Date</label>
+                                <input type="date" class="form-control" id="expense-date" autocomplete="off">
+                            </div>
+                            <div class="paidbyuser form-group">
+                                Paid by
+                                <div class="dropdown">
+                                    <button class="btn dropdown-toggle" id="dropDownPaid" style="margin-left: 10px" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select user</button>
+                                    <div class="dropdown-menu" id="paiduserselect" aria-labelledby="dropdownMenuButton">
+                                    </div>
+                                  </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="formGroupExampleInput2">Split this between</label>
+                                <div class="splitbetween">
+                                    <div id="everyoneorpeople">
+                                        <input type="radio" name="splitbetween" id="r1" value="everyone" checked onclick="splitBeweenSwitch()"> Everyone<br>
+                                        <input type="radio" name="splitbetween" id="r2" value="selectpeople" style="margin-left: 10px" onclick="splitBeweenSwitch()"> Select people<br>
+                                    </div>
+                                    <div id="people" class="d-none">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-warning btn-block" id="submitexpense" disabled>Continue</button>
+                        </form>
+                    </div>
+                    <div id="addcomplete" class="d-none">
+                        <h1 id="addcompletetext">Expense added</h1>
+                        <img id="banking" src="assets/bank.png">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <script src="https://www.gstatic.com/firebasejs/6.6.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.6.0/firebase-firestore.js"></script>
+
+        <script src="scripts/firebase.js"></script>
+        <script src="scripts/cookies.js"></script>
+        <script src="scripts/nav.js"></script>
+        <script src="scripts/app.js"></script>
+    
+    </body>
+</html>

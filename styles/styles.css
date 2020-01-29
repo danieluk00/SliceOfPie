@@ -1,0 +1,130 @@
+body {
+    padding-bottom: calc(10rem - 72px);
+    background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url("../assets/pie.jpeg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-size: cover;
+    font-family: 'Josefin Sans', sans-serif;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    max-width: 600px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.body-container {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.main-title {
+    font-size: 66px;
+}
+
+.intro-container {
+    margin-top: 200px;
+    text-align: center;
+}
+
+.divider {
+    background-color: white;
+}
+
+h1,h2,h3,h4,label,p {
+    color: white;
+}
+
+.nav-link {
+    color: #ffc13b;
+}
+
+.nav-link:hover {
+    color: #ffc13b;
+}
+
+.nav-link.active {
+    background-color: #ffc13b !important;
+    color: white;
+}
+
+.splitbetween {
+    display:flex;
+    justify-content: center;
+    color: white;
+}
+
+#createform {
+    width: 95%;
+}
+
+#namesform {
+    width: 95%;
+}
+
+.person-form {
+    margin-bottom: 10px;
+}
+
+.statediv {
+    margin-bottom: 20px;
+}
+
+#banking {
+    width: 80%;
+}
+
+#people{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 10px;
+    background: rgba(255,255,255,0.2);
+    padding: 10px;
+    border-radius: 5px;
+    flex-wrap: wrap;
+}
+
+.splitbetween {
+    display: flex;
+    flex-direction: column;
+}
+
+.people-checkbox {
+    margin-left: 10px;
+    margin-right: 4px;
+}
+
+#everyoneorpeople {
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.stateofplayuser {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.dropdown-toggle {
+    background: #ffc13b;
+}
+
+.paidbyuser {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: white;
+}
+
+.green {
+    color: #22e52f;
+}
+
+.red {
+    color: #ff6060;
+}
