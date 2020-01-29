@@ -159,6 +159,7 @@ const showHistory = () => {
                 }
         })
         expenseList.innerHTML += `<ul>`
+        animateCSS(expenseList,'flipInX');
     })
 }
 
@@ -233,8 +234,7 @@ const settleup = () => {
         }
     }
 
-    
-    
+    animateCSS(settleDiv,'flipInX');
     document.getElementById('settletitle').innerText = (settleDiv.innerHTML == '<ul></ul>') ? "Nothing to settle!" : "How to settle"; 
     
 }
