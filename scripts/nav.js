@@ -11,6 +11,7 @@ const clickMenu = clicked => {
     document.getElementById('stateofplay').classList.add('d-none');
     document.getElementById('addexpense').classList.add('d-none');
     document.getElementById('history').classList.add('d-none');
+
     //Show clicked on page element
     if (clicked==='statemenu') {
         document.getElementById('stateofplay').classList.remove('d-none');
@@ -22,6 +23,8 @@ const clickMenu = clicked => {
         document.getElementById('addcomplete').classList.add('d-none');
         document.getElementById('expense-date').valueAsDate = new Date();
         document.getElementById('expense-title').focus();
+        document.getElementById('expense-title').value="";
+        document.getElementById('expense-value').value="";
         animateCSS(document.getElementById('addexpense'),'fadeIn');
 
     } else if (clicked==='historymenu') {

@@ -164,12 +164,12 @@ const showHistory = () => {
         .orderBy("date", "desc")
         .onSnapshot(snapshot => {
             snapshot.docChanges().forEach(change => {
-                if (lastDateShown==null || change.doc.data().date!=lastDateShown) {
-                    lastDateShown = change.doc.data().date;
-                    const displayDate = new Date(lastDateShown).toLocaleDateString("en-GB", { weekday: 'short', day: 'numeric', month: 'short' })
-                    expenseList.innerHTML += `<p class="listdate">${displayDate}</p>`
-                }
                 if (change.type=="added") {
+                    if (lastDateShown==null || change.doc.data().date!=lastDateShown) {
+                        lastDateShown = change.doc.data().date;
+                        const displayDate = new Date(lastDateShown).toLocaleDateString("en-GB", { weekday: 'short', day: 'numeric', month: 'short' })
+                        expenseList.innerHTML += `<p class="listdate">${displayDate}</p>`
+                    }
                     count++;
                     expenseList.innerHTML += `<li class="list-group-item d-flex justify-content-between align-items-center" id="expense${count}">
                                             <span class="flex-fill font-weight-light">${change.doc.data().title} - ${currencySymbol}${formatNumber(change.doc.data().value)}</span>

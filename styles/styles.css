@@ -145,7 +145,7 @@ h1,h2,h3,h4,label,p {
     color: white;
 }
 
-.currencyradio {
+.currencyradio, .splitradio {
     margin-left: 10px;
     margin-right: 2px;
 }
