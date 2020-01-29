@@ -128,3 +128,7 @@ h1,h2,h3,h4,label,p {
 .red {
     color: #ff6060;
 }
+
+#eventcode {
+    word-wrap: break-word;
+}
