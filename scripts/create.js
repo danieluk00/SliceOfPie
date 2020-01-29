@@ -27,7 +27,16 @@ document.getElementById('namesform').addEventListener('submit', e => {
     addToPeople(document.getElementById('person5').value);
     addToPeople(document.getElementById('person6').value);
 
-    const object = {eventName, people}
+    let currencySymbol = null;
+    if (document.getElementById('r1').checked) {
+        currencySymbol = '£';
+    } else if (document.getElementById('r2').checked) {
+        currencySymbol = '$';
+    } else {
+        currencySymbol = '€';
+    }
+
+    const object = {eventName, people, currency: currencySymbol}
 
     //Save to Firebase
     db.collection("events").doc(eventCode).set(object).then(() => {

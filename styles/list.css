@@ -15,3 +15,7 @@
 .strikeout {
   text-decoration: line-through;
 }
+
+.listdate {
+  margin-top: 20px;
+}

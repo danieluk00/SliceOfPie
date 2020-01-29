@@ -7,6 +7,7 @@ let totalSpent = {};
 let totalReceived = {};
 let totalOwed = {};
 let eventName = null;
+let currencySymbol = '£';
 
 //Load state of play total
 const loadPeople = () => {
@@ -19,6 +20,8 @@ const loadPeople = () => {
                people = doc.data().people;
                eventName = doc.data().eventName;
                noOfPeople = people.length;
+               currencySymbol = doc.data().currency;
+               updateCurrency();
             }
         })
 
@@ -62,19 +65,26 @@ const loadExpenses = () => {
 
 const showStateOfPlay = () => {
     document.getElementById('summarytitle').innerText = eventName;
-    document.getElementById('total').innerText = "£" + formatNumber(totalReceived[user]);
-    document.getElementById('usertotal').innerText = "£" + formatNumber(totalSpent[user]);
+    document.getElementById('total').innerText = currencySymbol + formatNumber(totalReceived[user]);
+    document.getElementById('usertotal').innerText = currencySymbol + formatNumber(totalSpent[user]);
 
-    if (totalOwed[user]>=0) {
+    if (totalOwed[user]==0) {
         document.getElementById('userowedcopy').innerText = "You owe:";
-        document.getElementById('userowed').innerText = "£" + formatNumber(totalOwed[user]);
+        document.getElementById('userowed').innerText = currencySymbol + "0"
+        document.getElementById('userowedcopy').classList.remove('green');
+        document.getElementById('userowed').classList.remove('green');
+        document.getElementById('userowedcopy').classList.remove('red');
+        document.getElementById('userowed').classList.remove('red');
+    } else if (totalOwed[user]>=0) {
+        document.getElementById('userowedcopy').innerText = "You owe:";
+        document.getElementById('userowed').innerText = currencySymbol + formatNumber(totalOwed[user]);
         document.getElementById('userowedcopy').classList.add('red');
         document.getElementById('userowed').classList.add('red');
         document.getElementById('userowedcopy').classList.remove('green');
         document.getElementById('userowed').classList.remove('green');
     } else {
         document.getElementById('userowedcopy').innerText = "You are owed:";
-        document.getElementById('userowed').innerText = "£" + formatNumber(-1 * totalOwed[user]);
+        document.getElementById('userowed').innerText = currencySymbol + formatNumber(-1 * totalOwed[user]);
         document.getElementById('userowedcopy').classList.add('green');
         document.getElementById('userowed').classList.add('green');
         document.getElementById('userowedcopy').classList.remove('red');
@@ -91,7 +101,8 @@ const showStateOfPlay = () => {
 }
 
 const formatNumber = number => {
-    if (number===parseInt(number)) {
+
+    if (Number.isInteger(parseFloat(number))) {
         return number;
     } else {
         return parseFloat(number).toFixed(2);
@@ -102,7 +113,7 @@ const formatNumber = number => {
 document.getElementById('addexpenseform').addEventListener('submit', e => {
     e.preventDefault();
     const title = document.getElementById('expense-title').value;
-    const value = parseFloat(document.getElementById('expense-value').value);
+    const value = document.getElementById('expense-value').value;
     const date = document.getElementById('expense-date').value;
     console.log(value)
 
@@ -142,32 +153,42 @@ const newExpenseInput = () => {
 
 //Show history
 const showHistory = () => {
+    let lastDateShown = null;
+    let count = 0;
     const expenseList = document.getElementById('expense-list');
 
         expenseList.innerHTML = `<ul>`
 
         db.collection('expenses')
         .where('eventcode','==',eventCode)
+        .orderBy("date", "desc")
         .onSnapshot(snapshot => {
-            console.log(snapshot.docChanges())
             snapshot.docChanges().forEach(change => {
+                if (lastDateShown==null || change.doc.data().date!=lastDateShown) {
+                    lastDateShown = change.doc.data().date;
+                    const displayDate = new Date(lastDateShown).toLocaleDateString("en-GB", { weekday: 'short', day: 'numeric', month: 'short' })
+                    expenseList.innerHTML += `<p class="listdate">${displayDate}</p>`
+                }
                 if (change.type=="added") {
-                expenseList.innerHTML += `<li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <span class="flex-fill font-weight-light">${change.doc.data().title} - £${formatNumber(change.doc.data().value)}</span>
-                                        <i class="far fa-trash-alt delete" title="Delete" onclick="deleteExpense('${change.doc.id}','${change.doc.data().title}')"></i>
-                                        </li>`
+                    count++;
+                    expenseList.innerHTML += `<li class="list-group-item d-flex justify-content-between align-items-center" id="expense${count}">
+                                            <span class="flex-fill font-weight-light">${change.doc.data().title} - ${currencySymbol}${formatNumber(change.doc.data().value)}</span>
+                                            <i class="far fa-trash-alt delete" title="Delete" onclick="deleteExpense('${change.doc.id}','${change.doc.data().title}','${count}')"></i>
+                                            </li>`
                 }
         })
         expenseList.innerHTML += `<ul>`
-        animateCSS(expenseList,'flipInX');
+        animateCSS(expenseList,'fadeIn');
     })
 }
 
 //Delete expense
-const deleteExpense = (id, title) => {
+const deleteExpense = (id, title, count) => {
     if (window.confirm("Are you sure you want to delete the expense '"+title+"'?")) {
         deleteDoc('expenses',id);
-        clickMenu('historymenu');
+        document.getElementById('expense'+count).classList.add('strikeout')
+        document.getElementById('expense'+count).querySelector('i').classList.add('d-none');
+        animateCSS(document.getElementById('expense'+count),'rubberBand');
     }
 }
 
@@ -226,7 +247,7 @@ const settleup = () => {
         if (transfer>0) {
             tempOwed[orderedList[0]] -= transfer;
             tempOwed[orderedList[orderedList.length-1]] += transfer;
-            const str = orderedList[0] + ' pays ' + orderedList[orderedList.length-1] + ' £' + formatNumber(transfer);
+            const str = orderedList[0] + ' pays ' + orderedList[orderedList.length-1] + ' ' + currencySymbol + formatNumber(transfer);
             settleDiv.innerHTML += `<li class="list-group-item pay-item d-flex justify-content-between align-items-center" id='transfer${count}'>
             <span class="flex-fill font-weight-light">${str}</span>
             <i class="fas fa-check" title="Mark as settled" onclick="transferMoney('${orderedList[0]}','${orderedList[orderedList.length-1]}','${transfer}','${count}')"></i>
@@ -241,8 +262,13 @@ const settleup = () => {
 
 const transferMoney = (from, to, value,count) => {
     const title = from + ' paid ' + to;
-    const date = new Date();
-    const object = {title ,value, eventcode: eventCode, paidby: from, splitbetween: [to], date};
+    const today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const dateStr = yyyy + '-' + mm + '-' + dd;
+
+    const object = {title ,value, eventcode: eventCode, paidby: from, splitbetween: [to], date: dateStr};
     db.collection("expenses").add(object).then(
         document.getElementById('transfer'+count).classList.add('strikeout'),
         animateCSS(document.getElementById('transfer'+count),'rubberBand'),
@@ -290,3 +316,5 @@ function animateCSS(element, animationName, hide, callback) {
 
     element.addEventListener('animationend', handleAnimationEnd)
 }
+
+const updateCurrency = () => document.getElementById('valueinlabel').innerText = 'Value in ' + currencySymbol;
