@@ -32,7 +32,10 @@
 
                 <div id="stateofplay">
                     <div id="summarydiv">
-                        <h1 id="summarytitle">Summary</h1>
+                        <div id="titleandsettings">
+                        <h1 id="summarytitle">Summary</h1> 
+                        <span><i class="fas fa-share settings" onclick="settings()"></i></span>
+                    </div>
                         <div class="stateofplayuser statediv">
                             <div class="dropdown">
                                 <button class="btn dropdown-toggle" type="button" id="dropDownSummary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -133,7 +136,16 @@
                 </div> 
             </div>
 
-            <i class="fas fa-cog settings" onclick="settings()"></i>
+            <div id="infooverlay" class="overlaytext d-none">
+                <i class="fas fa-times" onclick="closeInfoOverlay()"></i>
+                <div class="intro-container container">
+                    <h1 id="infotitle">Summary</h1>
+                    <h1 id="infovalue">TBC</h1>
+                    <h4 id="infopaidby">Paid by</h1>
+                    <h4 id="infodate"></h1>
+                </div> 
+            </div>
+
         </div>
         
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

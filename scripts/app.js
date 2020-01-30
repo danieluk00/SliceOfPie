@@ -172,12 +172,12 @@ const showHistory = () => {
                 if (change.type=="added") {
                     if (lastDateShown==null || change.doc.data().date!=lastDateShown) {
                         lastDateShown = change.doc.data().date;
-                        const displayDate = new Date(lastDateShown).toLocaleDateString("en-GB", { weekday: 'short', day: 'numeric', month: 'short' })
+                        const displayDate = formatDate(lastDateShown);
                         expenseList.innerHTML += `<p class="listdate">${displayDate}</p>`
                     }
                     let usedBy = 'Split between everyone.';
                     if (change.doc.data().splitbetween.length == 1) {
-                        usedBy = 'Bought for ' + change.doc.data().splitbetween[0]
+                        usedBy = 'Bought for ' + change.doc.data().splitbetween[0] + '.'
                     } else if (change.doc.data().splitbetween.length != people.length) {
                         usedBy = 'Split between ';
                         change.doc.data().splitbetween.forEach(person => {
@@ -188,7 +188,6 @@ const showHistory = () => {
                     count++;
                     expenseList.innerHTML += `<li class="list-group-item d-flex justify-content-between align-items-center" id="expense${count}">
                                                 <span class="flex-fill font-weight-light">${change.doc.data().title} - ${currencySymbol}${formatNumber(change.doc.data().value)}</span>
-                                                <i class="fas fa-info-circle info" title="Paid by ${change.doc.data().paidby}. ${usedBy}"></i>
                                                 <i class="far fa-trash-alt delete" title="Delete" onclick="deleteExpense('${change.doc.id}','${change.doc.data().title}','${count}')"></i>
                                             </li>`
                 }
@@ -198,12 +197,14 @@ const showHistory = () => {
     })
 }
 
+/* <i class="fas fa-info-circle info" onclick="showInfo('${change.doc.data().title}','${change.doc.data().paidby}','${usedBy}','${change.doc.data().date}','${change.doc.data().value}')"</i> */
+
 //Delete expense
 const deleteExpense = (id, title, count) => {
     if (window.confirm("Are you sure you want to delete the expense '"+title+"'?")) {
         deleteDoc('expenses',id);
         document.getElementById('expense'+count).classList.add('strikeout')
-        document.getElementById('expense'+count).querySelector('i').classList.add('d-none');
+        document.getElementById('expense'+count).querySelector('.delete').classList.add('d-none');
         animateCSS(document.getElementById('expense'+count),'rubberBand');
     }
 }
@@ -274,7 +275,12 @@ const settleup = () => {
     }
 
     animateCSS(settleDiv,'flipInX');
-    document.getElementById('settletitle').innerText = (settleDiv.innerHTML == '<ul></ul>') ? "Nothing to settle!" : "How to settle"; 
+    if (settleDiv.innerHTML == '<ul></ul>') {
+        document.getElementById('settletitle').innerText = "Nothing to settle!"
+    } else {
+        document.getElementById('settletitle').innerText = "How to settle"; 
+        settleDiv.innerHTML += `<p>Click the tick to mark a debt as settled</p>`
+    } 
     
 }
 
@@ -337,3 +343,14 @@ function animateCSS(element, animationName, hide, callback) {
 
 const updateCurrency = () => document.getElementById('valueinlabel').innerText = 'Value in ' + currencySymbol;
 
+const showInfo = (title, paidBy, usedBy, date, value) => {
+    console.log('ba')
+
+    document.getElementById('infooverlay').classList.remove('d-none');
+    document.getElementById('infotitle').innerText = title;
+    document.getElementById('infodate').innerText = formatDate(date);
+    document.getElementById('infovalue').innerText = currencySymbol + value;
+    document.getElementById('infopaidby').innerText = 'Paid by '+ paidBy + '. ' + usedBy;
+}
+
+const formatDate = date => new Date(date).toLocaleDateString("en-GB", { weekday: 'short', day: 'numeric', month: 'short' });

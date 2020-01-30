@@ -46,6 +46,6 @@ const settings = () => {
     }
 }
 
-const closeOverlay = () => {
-    document.getElementById('overlay').classList.add('d-none');
-}
+const closeOverlay = () => document.getElementById('overlay').classList.add('d-none');
+
+const closeInfoOverlay = () => document.getElementById('infooverlay').classList.add('d-none');
