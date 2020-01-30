@@ -20,7 +20,10 @@
                     </div>
                     <div class="col-lg-8 align-self-baseline">
                         <p class="text-white-75 font-weight-light text-white mb-5">The easy way to track group expenses and work out who owes what</p>
+                        <div class="homebuttons">
                         <a class="btn btn-warning btn-xl js-scroll-trigger" href="create.html">Get started</a>
+                        <a class="btn btn-warning btn-xl js-scroll-trigger d-none" id="lastevent" onclick="goToLastEvent()" style="margin-top: 10px" href="#">Go to my last event</a>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -32,9 +35,16 @@
         <script src="scripts/cookies.js"></script>
         <script>
             const urlParams = new URLSearchParams(window.location.search);
-            const eventCode = urlParams.get('event');
+            let eventCode = urlParams.get('event');
 
             if (eventCode) {
+                window.location.href = "app.html?event=" + eventCode;
+            } else if(checkCookie('lastevent')) {
+                document.getElementById('lastevent').classList.remove('d-none');
+                eventCode = getCookie('lastevent');
+            }
+
+            const goToLastEvent = () => {
                 window.location.href = "app.html?event=" + eventCode;
             }
         </script>

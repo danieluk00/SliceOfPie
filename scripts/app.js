@@ -13,6 +13,10 @@ let currencySymbol = '£';
 //Load state of play total
 const loadPeople = () => {
 
+    if (eventCode) {
+        setCookie('lastevent',eventCode,365)
+    }
+
     //Get people
     people = [];
     db.collection('events').get().then((snapshot) => {
