@@ -17,6 +17,7 @@ const clickMenu = clicked => {
         document.getElementById('stateofplay').classList.remove('d-none');
         animateCSS(document.getElementById('stateofplay'),'fadeIn');
         backToSummary();
+
     } else if (clicked==='addmenu') {
         document.getElementById('addexpense').classList.remove('d-none');
         document.getElementById('addexpensemain').classList.remove('d-none');
@@ -25,6 +26,8 @@ const clickMenu = clicked => {
         document.getElementById('expense-title').focus();
         document.getElementById('expense-title').value="";
         document.getElementById('expense-value').value="";
+        document.getElementById('r1').checked = true;
+        document.getElementById('people').classList.add('d-none');
         animateCSS(document.getElementById('addexpense'),'fadeIn');
 
     } else if (clicked==='historymenu') {
@@ -32,4 +35,17 @@ const clickMenu = clicked => {
         animateCSS(document.getElementById('history'),'fadeIn');
         showHistory();
     }
+}
+
+const settings = () => {
+    if (eventCode) {
+        const url = window.location.href.replace("/app.html", "").replace("#", "");
+        document.getElementById('eventcode').innerText = url;
+        document.getElementById('overlay').classList.remove('d-none');
+        document.getElementById('overlaytitle').innerText = eventName;
+    }
+}
+
+const closeOverlay = () => {
+    document.getElementById('overlay').classList.add('d-none');
 }

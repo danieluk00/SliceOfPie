@@ -6,6 +6,7 @@ let people = [];
 let totalSpent = {};
 let totalReceived = {};
 let totalOwed = {};
+let groupTotal = 0;
 let eventName = null;
 let currencySymbol = '£';
 
@@ -43,19 +44,27 @@ const loadPeople = () => {
 }
 
 const loadExpenses = () => {
+    groupTotal = 0;
+
     db.collection('expenses')
     .where('eventcode','==',eventCode)
     .onSnapshot(snapshot => {
         snapshot.docChanges().forEach(change => {
             const changeData = change.doc.data();
 
+            //Group total
+            if (changeData.type==='expense') {
+                groupTotal += parseFloat(changeData.value);
+            }
+
             //Total received
             changeData.splitbetween.forEach(person => {
                 totalReceived[person] += (parseFloat(changeData.value / changeData.splitbetween.length));
             })
-            //Total spent
+
+            //Total paid
             totalSpent[changeData.paidby] += parseFloat(changeData.value);
-            //Total owed
+
         })
         people.forEach(person => totalOwed[person] += totalReceived[person] - totalSpent[person]);
         getPerson();
@@ -67,6 +76,7 @@ const showStateOfPlay = () => {
     document.getElementById('summarytitle').innerText = eventName;
     document.getElementById('total').innerText = currencySymbol + formatNumber(totalReceived[user]);
     document.getElementById('usertotal').innerText = currencySymbol + formatNumber(totalSpent[user]);
+    document.getElementById('grouptotal').innerText = currencySymbol + formatNumber(groupTotal);
 
     if (totalOwed[user]==0) {
         document.getElementById('userowedcopy').innerText = "You owe:";
@@ -91,23 +101,18 @@ const showStateOfPlay = () => {
         document.getElementById('userowed').classList.remove('red');
     }
 
+    isNaN(groupTotal) ? document.querySelector('.statediv0').classList.add('d-none') : document.querySelector('.statediv0').classList.remove('d-none');
     isNaN(totalReceived[user]) ? document.querySelector('.statediv1').classList.add('d-none') : document.querySelector('.statediv1').classList.remove('d-none');
     isNaN(totalSpent[user]) ? document.querySelector('.statediv2').classList.add('d-none') : document.querySelector('.statediv2').classList.remove('d-none');
     isNaN(totalOwed[user]) ? document.querySelector('.statediv3').classList.add('d-none') : document.querySelector('.statediv3').classList.remove('d-none');
 
+    animateCSS(document.querySelector('.statediv0'),'rubberBand');
     animateCSS(document.querySelector('.statediv1'),'rubberBand');
     animateCSS(document.querySelector('.statediv2'),'rubberBand');
     animateCSS(document.querySelector('.statediv3'),'rubberBand');
 }
 
-const formatNumber = number => {
-
-    if (Number.isInteger(parseFloat(number))) {
-        return number;
-    } else {
-        return parseFloat(number).toFixed(2);
-    }
-}
+const formatNumber = number => Number.isInteger(parseFloat(number)) ? number : parseFloat(number).toFixed(2);
 
 //Add an expense
 document.getElementById('addexpenseform').addEventListener('submit', e => {
@@ -128,7 +133,7 @@ document.getElementById('addexpenseform').addEventListener('submit', e => {
         })
     }
 
-    const object = {title,value, eventcode: eventCode, paidby: user, splitbetween: splitters, date};
+    const object = {title,value, eventcode: eventCode, paidby: user, splitbetween: splitters, date, type: 'expense'};
     db.collection("expenses").add(object).then((expenseSubmitted(title)));
 })
 
@@ -170,10 +175,21 @@ const showHistory = () => {
                         const displayDate = new Date(lastDateShown).toLocaleDateString("en-GB", { weekday: 'short', day: 'numeric', month: 'short' })
                         expenseList.innerHTML += `<p class="listdate">${displayDate}</p>`
                     }
+                    let usedBy = 'Split between everyone.';
+                    if (change.doc.data().splitbetween.length == 1) {
+                        usedBy = 'Bought for ' + change.doc.data().splitbetween[0]
+                    } else if (change.doc.data().splitbetween.length != people.length) {
+                        usedBy = 'Split between ';
+                        change.doc.data().splitbetween.forEach(person => {
+                            usedBy += person + ", "
+                        })
+                        usedBy = usedBy.substring(0,usedBy.length-2)+'.';
+                    }
                     count++;
                     expenseList.innerHTML += `<li class="list-group-item d-flex justify-content-between align-items-center" id="expense${count}">
-                                            <span class="flex-fill font-weight-light">${change.doc.data().title} - ${currencySymbol}${formatNumber(change.doc.data().value)}</span>
-                                            <i class="far fa-trash-alt delete" title="Delete" onclick="deleteExpense('${change.doc.id}','${change.doc.data().title}','${count}')"></i>
+                                                <span class="flex-fill font-weight-light">${change.doc.data().title} - ${currencySymbol}${formatNumber(change.doc.data().value)}</span>
+                                                <i class="fas fa-info-circle info" title="Paid by ${change.doc.data().paidby}. ${usedBy}"></i>
+                                                <i class="far fa-trash-alt delete" title="Delete" onclick="deleteExpense('${change.doc.id}','${change.doc.data().title}','${count}')"></i>
                                             </li>`
                 }
         })
@@ -194,13 +210,15 @@ const deleteExpense = (id, title, count) => {
 
 const deleteDoc = (collectionName, id) => db.collection(collectionName).doc(id).delete();
 
+
+//Choose whether to split between everyone or specific people
 const splitBeweenSwitch = () => {
     if (document.getElementById('r1').checked === true) {
         document.getElementById('people').classList.add('d-none');
     } else {
-        console.log('as')
         document.getElementById('people').classList.remove('d-none');
         document.getElementById('people').innerHTML = '';
+        animateCSS(document.getElementById('people'),'fadeIn');
         people.forEach(person => {
             document.getElementById('people').innerHTML += `<input class="people-checkbox" type="checkbox" name="${person}" id="${person}-checkbox" value=${person} checked> ${person}`;
         })
@@ -268,7 +286,7 @@ const transferMoney = (from, to, value,count) => {
     var yyyy = today.getFullYear();
     const dateStr = yyyy + '-' + mm + '-' + dd;
 
-    const object = {title ,value, eventcode: eventCode, paidby: from, splitbetween: [to], date: dateStr};
+    const object = {title ,value, eventcode: eventCode, paidby: from, splitbetween: [to], date: dateStr, type: 'transfer'};
     db.collection("expenses").add(object).then(
         document.getElementById('transfer'+count).classList.add('strikeout'),
         animateCSS(document.getElementById('transfer'+count),'rubberBand'),
@@ -318,3 +336,4 @@ function animateCSS(element, animationName, hide, callback) {
 }
 
 const updateCurrency = () => document.getElementById('valueinlabel').innerText = 'Value in ' + currencySymbol;
+

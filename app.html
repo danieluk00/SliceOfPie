@@ -15,6 +15,7 @@
     <body onload="loadPeople();">
 
         <div class="container">
+
             <ul class="nav nav-pills nav-fill">
                 <li class="nav-item">
                   <a class="nav-link active" href="#" id="statemenu" onclick="clickMenu('statemenu')">Summary</a>
@@ -40,6 +41,10 @@
                                 <div class="dropdown-menu" id="stateofplayuserselect" aria-labelledby="dropdownMenuButton">
                                 </div>
                             </div>
+                        </div>
+                        <div class="statediv0 statediv d-none">
+                            <h4>Group total:</h4>
+                            <h1 id="grouptotal">TBC</h1>
                         </div>
                         <div class="statediv1 statediv d-none">
                             <h4>Your slice of the pie:</h4>
@@ -115,6 +120,20 @@
                 </div>
 
             </div>
+
+            <div id="overlay" class="overlaytext d-none">
+                <i class="fas fa-times" onclick="closeOverlay()"></i>
+                <div class="intro-container container">
+                    <h1 id="overlaytitle">Summary</h1>
+                    <h4>Share this URL with your group:</h1>
+                    <h1 id="eventcode"></h2>
+                    <form id="copyurl">
+                        <button type="submit" class="btn btn-warning btn-block">Copy URL</button>
+                    </form>
+                </div> 
+            </div>
+
+            <i class="fas fa-cog settings" onclick="settings()"></i>
         </div>
         
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
@@ -126,8 +145,15 @@
 
         <script src="scripts/firebase.js"></script>
         <script src="scripts/cookies.js"></script>
+        <script src="scripts/share.js"></script>
         <script src="scripts/nav.js"></script>
         <script src="scripts/app.js"></script>
+
+        <script>
+            if (!new URLSearchParams(window.location.search).get('event')) {
+                window.location.href = "index.html";
+            }
+        </script>
     
     </body>
 </html>

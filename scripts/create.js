@@ -43,7 +43,7 @@ document.getElementById('namesform').addEventListener('submit', e => {
         //Show event code
         namesContainer.classList.add('d-none');
         codeContainer.classList.remove('d-none');
-        const url = window.location.href.replace("/create.html", "");
+        const url = window.location.href.replace("/create.html", "").replace("#", "");
         document.getElementById('eventcode').innerText = url + '?event=' + eventCode;
     })
 })
@@ -99,21 +99,3 @@ document.getElementById('person5').addEventListener('keyup', e => {
         document.getElementById('person6').disabled=false;
     }
 });
-
-document.getElementById('copyurl').addEventListener('submit', e => {
-    console.log('ab')
-    e.preventDefault();
-
-        const el = document.createElement('textarea');
-        el.value = document.getElementById('eventcode').innerText;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
-
-        document.getElementById('eventcode').classList.add('animated','rubberBand')
-        setTimeout(function(){
-            document.getElementById('eventcode').classList.remove('animated','rubberBand')
-        }, 1000);
-
-  });

@@ -16,9 +16,18 @@ body {
     margin-right: 20px;
 }
 
+.share-container {
+    max-width: 600px;
+}
+
 .body-container {
     margin-top: 20px;
     text-align: center;
+    position:relative;
+}
+
+.btn-primary {
+    background-color: #ffc13b !important;
 }
 
 .main-title {
@@ -29,6 +38,7 @@ body {
     margin-top: 200px;
     text-align: center;
 }
+
 @media only screen and (max-width: 800px) {
     .intro-container {
         margin-top: 140px;
@@ -49,6 +59,7 @@ h1,h2,h3,h4,label,p {
 
 .nav-link:hover {
     color: #ffc13b;
+    opacity: 0.8;
 }
 
 .nav-link.active {
@@ -124,6 +135,7 @@ h1,h2,h3,h4,label,p {
     flex-direction: row;
     justify-content: center;
     color: white;
+    align-items: center;
 }
 
 .green {
@@ -136,6 +148,12 @@ h1,h2,h3,h4,label,p {
 
 #eventcode {
     word-wrap: break-word;
+    color: #ffc13b;
+}
+@media only screen and (max-width: 800px) {
+    #eventcode {
+        font-size: 20px;
+    }
 }
 
 .currencydiv {
@@ -148,4 +166,47 @@ h1,h2,h3,h4,label,p {
 .currencyradio, .splitradio {
     margin-left: 10px;
     margin-right: 2px;
+}
+
+.settings {
+    position:absolute;
+    bottom:10;
+    right:10;
+    color: white;
+    font-size: 36px;
+}
+
+.overlaytext{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background-color:rgba(0, 0, 0, 0.85);
+    background: url(data:;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAABl0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjUuNUmK/OAAAAATSURBVBhXY2RgYNgHxGAAYuwDAA78AjwwRoQYAAAAAElFTkSuQmCC) repeat scroll transparent\9; /* ie fallback png background image */
+    z-index:9999;
+    color:white;
+    display: flex;
+    justify-content: center;
+  }
+
+  .fa-times {
+    position:absolute;
+    top:10;
+    right:10;
+    color: white;
+    font-size: 36px;
+}
+
+.settings:hover, .fa-times:hover{
+    transition: transform .2s; /* Animation */
+    transform: scale(1.2);
+  }
+
+.sharehref {
+    color: white;
+}
+
+#overlaytitle {
+    margin-bottom: 20px;
 }
