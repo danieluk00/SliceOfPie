@@ -5,7 +5,8 @@ var firebaseConfig = {
     projectId: "sliceofpie",
     storageBucket: "sliceofpie.appspot.com",
     messagingSenderId: "425130834619",
-    appId: "1:425130834619:web:af1479d550adf4a502079e"
+    appId: "1:425130834619:web:af1479d550adf4a502079e",
+    measurementId: "G-VXN532BC1J"
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);

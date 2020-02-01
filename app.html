@@ -46,7 +46,7 @@
                             </div>
                         </div>
                         <div class="statediv0 statediv d-none">
-                            <h4>Group total:</h4>
+                            <h4>Group total spend:</h4>
                             <h1 id="grouptotal">TBC</h1>
                         </div>
                         <div class="statediv1 statediv d-none">
@@ -74,7 +74,10 @@
                 <div id="history" class="d-none">
                     <h1>Expense history</h1>
                     <div id="expense-list">
-
+                    </div>
+                    <div id="noexpenses">
+                        <img id="noexpenseimg" src="assets/blank.png">
+                        <h4 style="margin-top: 20px">Nothing to show</h4>
                     </div>
                 </div>
 
@@ -87,7 +90,7 @@
                                 <input type="text" class="form-control" id="expense-title" placeholder="e.g. Train tickets" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label id="valueinlabel" for="formGroupExampleInput2">Value in £</label>
+                                <label id="valueinlabel" for="formGroupExampleInput2">Value</label>
                                 <input type="text" class="form-control" id="expense-value" autocomplete="off">
                             </div>
                             <div class="form-group">
@@ -113,7 +116,41 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-warning btn-block" id="submitexpense" disabled>Continue</button>
+                            <button type="submit" class="btn btn-warning btn-block" id="submitexpense" style="margin-bottom:10px" disabled>Save</button>
+                            <a href="#" class="addlink" onclick="navigateAddExpense('transfermoneymain')"><i class="fas fa-arrow-circle-right"></i> Or transfer money to someone</a>
+                        </form>
+                    </div>
+                    <div id="transfermoneymain" class="d-none">
+                        <h1>Transfer money</h1>
+                        <form id ="transferform">
+                            <div id="from-to">
+                                <div class="paidbyuser form-group">
+                                    From
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" id="dropDownTransferFrom" style="margin-left: 10px" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select user</button>
+                                        <div class="dropdown-menu" id="transferfrom" aria-labelledby="dropdownMenuButton">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="paidbyuser form-group" style="padding-left: 10px">
+                                    To
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" id="dropDownTransferTo" style="margin-left: 10px" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select user</button>
+                                        <div class="dropdown-menu" id="transferto" aria-labelledby="dropdownMenuButton">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label id="transfervalueinlabel" for="formGroupExampleInput2">Value</label>
+                                <input type="text" class="form-control" id="transfer-value" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="formGroupExampleInput2">Date</label>
+                                <input type="date" class="form-control" id="transfer-date" autocomplete="off">
+                            </div>
+                            <button type="submit" class="btn btn-warning btn-block" id="submittransfer" style="margin-bottom:10px" disabled>Save</button>
+                            <a href="#" class="addlink" onclick="navigateAddExpense('addexpensemain')"><i class="fas fa-pen"></i>  Add expense instead</a>
                         </form>
                     </div>
                     <div id="addcomplete" class="d-none">
@@ -143,6 +180,14 @@
                     <h1 id="infovalue">TBC</h1>
                     <h4 id="infopaidby">Paid by</h1>
                     <h4 id="infodate"></h1>
+                </div> 
+            </div>
+
+            <div id="erroroverlay" class="overlaytext d-none">
+                <i class="fas fa-times" onclick="closeErrorOverlay()"></i>
+                <div class="intro-container container">
+                    <h1 id="infotitle">Oops!</h1>
+                    <h4 id="errortext">TBC</h4>
                 </div> 
             </div>
 

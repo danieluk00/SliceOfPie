@@ -19,6 +19,7 @@ const loadPeople = () => {
 
     //Get people
     people = [];
+
     db.collection('events').get().then((snapshot) => {
         snapshot.docs.forEach(doc => {
             if (doc.id == eventCode) {
@@ -30,8 +31,14 @@ const loadPeople = () => {
             }
         })
 
+        if (eventName == null) {
+            showError("We can't find that event");
+        }
+
         document.getElementById('stateofplayuserselect').innerHTML = "";
         document.getElementById('paiduserselect').innerHTML = "";
+        document.getElementById('transferfrom').innerHTML = "";
+        document.getElementById('transferto').innerHTML = "";
 
         totalSpent = {}
         totalReceived = {}
@@ -41,6 +48,8 @@ const loadPeople = () => {
             totalOwed[person] = 0;
             document.getElementById('stateofplayuserselect').innerHTML += `<a class="dropdown-item" href="#" onclick="switchUser('${person}')">${person}</a>`
             document.getElementById('paiduserselect').innerHTML += `<a class="dropdown-item" href="#" onclick="switchUser('${person}')">${person}</a>`
+            document.getElementById('transferfrom').innerHTML += `<a class="dropdown-item" href="#" onclick="switchUser('${person}'); newTransferInput()">${person}</a>`
+            document.getElementById('transferto').innerHTML += `<a class="dropdown-item" href="#" onclick="switchUserTo('${person}'); newTransferInput()">${person}</a>`
         })
 
         loadExpenses();
@@ -122,7 +131,7 @@ const formatNumber = number => Number.isInteger(parseFloat(number)) ? number : p
 document.getElementById('addexpenseform').addEventListener('submit', e => {
     e.preventDefault();
     const title = document.getElementById('expense-title').value;
-    const value = document.getElementById('expense-value').value;
+    const value = removeSymbols(document.getElementById('expense-value').value);
     const date = document.getElementById('expense-date').value;
     console.log(value)
 
@@ -136,15 +145,32 @@ document.getElementById('addexpenseform').addEventListener('submit', e => {
             }
         })
     }
+    if (splitters.length==0) {
+        splitters.push(user)
+    }
 
     const object = {title,value, eventcode: eventCode, paidby: user, splitbetween: splitters, date, type: 'expense'};
-    db.collection("expenses").add(object).then((expenseSubmitted(title)));
+    db.collection("expenses").add(object).then((expenseSubmitted(title + ' added')))
 })
+
+//Transfer money
+document.getElementById('transferform').addEventListener('submit', e => {
+    e.preventDefault();
+    const value = removeSymbols(document.getElementById('transfer-value').value);
+    const date = document.getElementById('transfer-date').value;
+    const paidto = document.getElementById('dropDownTransferTo').innerText;
+    const title = `${user} paid ${paidto}`;
+    
+    const object = {title,value, eventcode: eventCode, paidby: user, splitbetween: [paidto], date, type: 'transfer'};
+    db.collection("expenses").add(object).then((expenseSubmitted(title)))
+})
+
 
 const expenseSubmitted = title => {
     document.getElementById('addexpensemain').classList.add('d-none');
+    document.getElementById('transfermoneymain').classList.add('d-none');
     document.getElementById('addcomplete').classList.remove('d-none');
-    document.getElementById('addcompletetext').innerText = title + ' added'
+    document.getElementById('addcompletetext').innerText = title;
     animateCSS(document.getElementById('addcompletetext'),'flip')
     animateCSS(document.getElementById('banking'),'flip')
 }
@@ -153,12 +179,42 @@ document.getElementById('expense-title').addEventListener('keyup', e => newExpen
 document.getElementById('expense-value').addEventListener('keyup', e => newExpenseInput())
 
 const newExpenseInput = () => {
-    if (document.getElementById('expense-title').value !="" && document.getElementById('expense-value').value!="" && !isNaN(document.getElementById('expense-value').value) && document.getElementById('dropDownPaid').innerText!='Select user') {
+    if (document.getElementById('expense-title').value !="" && document.getElementById('expense-value').value!="" && isNumber(document.getElementById('expense-value').value) && document.getElementById('dropDownPaid').innerText!='Select user') {
         document.getElementById('submitexpense').disabled = false;
     } else {
         document.getElementById('submitexpense').disabled = true;
     }
+
+    let splitters = []
+    if (document.getElementById('r1').checked) {
+        splitters = people
+    } else {
+        people.forEach(person => {
+            if (document.getElementById(person+'-checkbox').checked) {
+                splitters.push(person);
+            }
+        })
+    }
+    if (splitters.length==0) {
+        document.getElementById('submitexpense').disabled = true;
+    }
 }
+
+document.getElementById('transfer-value').addEventListener('keyup', e => newTransferInput())
+document.getElementById('transferfrom').addEventListener('onclick', e => newTransferInput())
+document.getElementById('transferto').addEventListener('onclick', e => newTransferInput())
+
+const newTransferInput = () => {
+    if (document.getElementById('transfer-value').value!="" && isNumber(document.getElementById('transfer-value').value) && document.getElementById('dropDownTransferFrom').innerText!='Select user' && document.getElementById('dropDownTransferTo').innerText!='Select user' && document.getElementById('dropDownTransferFrom').innerText!=document.getElementById('dropDownTransferTo').innerText) {
+        document.getElementById('submittransfer').disabled = false;
+    } else {
+        document.getElementById('submittransfer').disabled = true;
+    }
+}
+
+const isNumber = text => !isNaN(removeSymbols(text));
+
+const removeSymbols = text => text.replace(currencySymbol,'');
 
 //Show history
 const showHistory = () => {
@@ -179,24 +235,39 @@ const showHistory = () => {
                         const displayDate = formatDate(lastDateShown);
                         expenseList.innerHTML += `<p class="listdate">${displayDate}</p>`
                     }
-                    let usedBy = 'Split between everyone.';
+                    let usedBy = 'For everyone';
                     if (change.doc.data().splitbetween.length == 1) {
-                        usedBy = 'Bought for ' + change.doc.data().splitbetween[0] + '.'
+                        usedBy = 'For ' + change.doc.data().splitbetween[0]
+                    } else if (change.doc.data().splitbetween.length == 0) {
+                        usedBy = 'For no-one' 
                     } else if (change.doc.data().splitbetween.length != people.length) {
-                        usedBy = 'Split between ';
+                        usedBy = 'For ';
                         change.doc.data().splitbetween.forEach(person => {
                             usedBy += person + ", "
                         })
-                        usedBy = usedBy.substring(0,usedBy.length-2)+'.';
+                        usedBy = usedBy.substring(0,usedBy.length-2);
+                    }
+                    let line2copy="";
+                    if (change.doc.data().type=='expense') {
+                        line2copy = `Paid by ${change.doc.data().paidby}. ${usedBy}.`
                     }
                     count++;
-                    expenseList.innerHTML += `<li class="list-group-item d-flex justify-content-between align-items-center" id="expense${count}">
-                                                <span class="flex-fill font-weight-light">${change.doc.data().title} - ${currencySymbol}${formatNumber(change.doc.data().value)}</span>
-                                                <i class="far fa-trash-alt delete" title="Delete" onclick="deleteExpense('${change.doc.id}','${change.doc.data().title}','${count}')"></i>
+                    expenseList.innerHTML += `<li class="list-group-item list-expense-item" id="expense${count}">
+                                                <div class="justify-content-between align-items-center d-flex">
+                                                    <span class="flex-fill font-weight-light">${change.doc.data().title} - ${currencySymbol}${formatNumber(change.doc.data().value)}</span>
+                                                    <i class="far fa-trash-alt delete" title="Delete" onclick="deleteExpense('${change.doc.id}','${change.doc.data().title}','${count}')"></i>
+                                                </div>
+                                                <div class="list-subtext">${line2copy}<div>
                                             </li>`
                 }
         })
         expenseList.innerHTML += `<ul>`
+
+        if (expenseList.innerHTML=='<ul></ul><ul></ul>') {
+            document.getElementById('noexpenses').classList.remove('d-none');
+        } else {
+            document.getElementById('noexpenses').classList.add('d-none');
+        }
         animateCSS(expenseList,'fadeIn');
     })
 }
@@ -213,8 +284,7 @@ const deleteExpense = (id, title, count) => {
     }
 }
 
-const deleteDoc = (collectionName, id) => db.collection(collectionName).doc(id).delete();
-
+const deleteDoc = (collectionName, id) => db.collection(collectionName).doc(id).delete()
 
 //Choose whether to split between everyone or specific people
 const splitBeweenSwitch = () => {
@@ -225,7 +295,7 @@ const splitBeweenSwitch = () => {
         document.getElementById('people').innerHTML = '';
         animateCSS(document.getElementById('people'),'fadeIn');
         people.forEach(person => {
-            document.getElementById('people').innerHTML += `<input class="people-checkbox" type="checkbox" name="${person}" id="${person}-checkbox" value=${person} checked> ${person}`;
+            document.getElementById('people').innerHTML += `<input class="people-checkbox" type="checkbox" name="${person}" id="${person}-checkbox" value=${person} onchange="newExpenseInput()" checked> ${person}`;
         })
     } 
 }
@@ -277,13 +347,14 @@ const settleup = () => {
             </li>`
         }
     }
+    settleDiv.innerHTML+= '<ul>';
 
     animateCSS(settleDiv,'flipInX');
-    if (settleDiv.innerHTML == '<ul></ul>') {
+    if (settleDiv.innerHTML == '<ul></ul><ul></ul>') {
         document.getElementById('settletitle').innerText = "Nothing to settle!"
     } else {
         document.getElementById('settletitle').innerText = "How to settle"; 
-        settleDiv.innerHTML += `<p>Click the tick to mark a debt as settled</p>`
+        settleDiv.innerHTML += `<p>Click a tick to mark the debt as settled</p>`
     } 
     
 }
@@ -301,7 +372,7 @@ const transferMoney = (from, to, value,count) => {
         document.getElementById('transfer'+count).classList.add('strikeout'),
         animateCSS(document.getElementById('transfer'+count),'rubberBand'),
         document.getElementById('transfer'+count).querySelector('i').classList.add('d-none')
-    );
+    )
 }
 
 const backToSummary = () => {
@@ -314,10 +385,13 @@ const switchUser = person => {
     setCookie(eventCode+'name',person,365);
     document.getElementById('dropDownSummary').innerText=person;
     document.getElementById('dropDownPaid').innerText=person;
+    document.getElementById('dropDownTransferFrom').innerText=person;
     user = person;
     newExpenseInput();
     showStateOfPlay();
 }
+
+const switchUserTo = person => document.getElementById('dropDownTransferTo').innerText=person;
 
 const getPerson = () => {
     if (checkCookie(eventCode+'name')) {
@@ -345,7 +419,13 @@ function animateCSS(element, animationName, hide, callback) {
     element.addEventListener('animationend', handleAnimationEnd)
 }
 
-const updateCurrency = () => document.getElementById('valueinlabel').innerText = 'Value in ' + currencySymbol;
+const updateCurrency = () => {
+    // document.getElementById('valueinlabel').innerText = 'Value in ' + currencySymbol
+    // document.getElementById('transfervalueinlabel').innerText = 'Value in ' + currencySymbol
+    document.getElementById('expense-value').placeholder = currencySymbol
+    document.getElementById('transfer-value').placeholder = currencySymbol
+    
+};
 
 const showInfo = (title, paidBy, usedBy, date, value) => {
     console.log('ba')

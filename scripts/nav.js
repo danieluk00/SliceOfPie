@@ -22,11 +22,13 @@ const clickMenu = clicked => {
         document.getElementById('addexpense').classList.remove('d-none');
         document.getElementById('addexpensemain').classList.remove('d-none');
         document.getElementById('addcomplete').classList.add('d-none');
+        document.getElementById('transfermoneymain').classList.add('d-none');
         document.getElementById('expense-date').valueAsDate = new Date();
         document.getElementById('expense-title').focus();
         document.getElementById('expense-title').value="";
         document.getElementById('expense-value').value="";
         document.getElementById('r1').checked = true;
+        document.getElementById('submittransfer').disabled = true;
         document.getElementById('people').classList.add('d-none');
         animateCSS(document.getElementById('addexpense'),'fadeIn');
 
@@ -49,3 +51,24 @@ const settings = () => {
 const closeOverlay = () => document.getElementById('overlay').classList.add('d-none');
 
 const closeInfoOverlay = () => document.getElementById('infooverlay').classList.add('d-none');
+
+const closeErrorOverlay = () => document.getElementById('erroroverlay').classList.add('d-none');
+
+const showError = error => {
+    document.getElementById('erroroverlay').classList.remove('d-none');
+    document.getElementById('errortext').innerText = error;
+}
+
+const navigateAddExpense = elementToShow => {
+    document.getElementById('transfermoneymain').classList.add('d-none');
+    document.getElementById('addexpensemain').classList.add('d-none');
+    document.getElementById(elementToShow).classList.remove('d-none');
+    animateCSS(document.getElementById('addexpense'),'fadeIn');
+
+    if (elementToShow=='transfermoneymain') {
+        document.getElementById('transfer-date').valueAsDate = new Date();
+        document.getElementById('transfer-value').value="";
+        document.getElementById('dropDownTransferTo').innerText="Select user";
+        document.getElementById('submittransfer').disabled = true;
+    }
+}

@@ -91,7 +91,7 @@ h1,h2,h3,h4,label,p {
     margin-bottom: 20px;
 }
 
-#banking {
+#banking, #noexpenseimg {
     width: 80%;
 }
 
@@ -99,10 +99,11 @@ h1,h2,h3,h4,label,p {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
     margin-top: 10px;
     background: rgba(255,255,255,0.2);
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 20px;
     flex-wrap: wrap;
 }
 
@@ -223,5 +224,8 @@ h1,h2,h3,h4,label,p {
     justify-content: center;
 }
 
-.text-shadow-drop-center{-webkit-animation:text-shadow-drop-center .6s both;animation:text-shadow-drop-center .6s both}
-@-webkit-keyframes text-shadow-drop-center{0%{text-shadow:0 0 0 transparent}100%{text-shadow:0 0 18px rgba(0,0,0,.35)}}@keyframes text-shadow-drop-center{0%{text-shadow:0 0 0 transparent}100%{text-shadow:0 0 18px rgba(0,0,0,.35)}}
+#from-to {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
