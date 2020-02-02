@@ -12,6 +12,8 @@ const clickMenu = clicked => {
     document.getElementById('addexpense').classList.add('d-none');
     document.getElementById('history').classList.add('d-none');
 
+    loadAd();
+
     //Show clicked on page element
     if (clicked==='statemenu') {
         document.getElementById('stateofplay').classList.remove('d-none');
@@ -60,6 +62,8 @@ const showError = error => {
 }
 
 const navigateAddExpense = elementToShow => {
+    loadAd();
+
     document.getElementById('transfermoneymain').classList.add('d-none');
     document.getElementById('addexpensemain').classList.add('d-none');
     document.getElementById(elementToShow).classList.remove('d-none');
@@ -71,4 +75,16 @@ const navigateAddExpense = elementToShow => {
         document.getElementById('dropDownTransferTo').innerText="Select user";
         document.getElementById('submittransfer').disabled = true;
     }
+}
+
+const loadAd = () => {
+    const adTotal = 7;
+    //Hide all ads
+    for (let i=1; i<=adTotal; i++) {
+        document.getElementById('ad'+i).classList.add('d-none');
+    }
+    //Show random ad
+    const adNum = parseInt(Math.floor(Math.random() * (adTotal-1 + 0))) + 1;
+    document.getElementById('ad'+adNum).classList.remove('d-none');
+    animateCSS(document.getElementById('ad'+adNum),'fadeIn');
 }

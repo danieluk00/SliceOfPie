@@ -91,7 +91,7 @@ const showStateOfPlay = () => {
     document.getElementById('usertotal').innerText = currencySymbol + formatNumber(totalSpent[user]);
     document.getElementById('grouptotal').innerText = currencySymbol + formatNumber(groupTotal);
 
-    if (totalOwed[user]==0) {
+    if (totalOwed[user]<1 && totalOwed[user]>-1) {
         document.getElementById('userowedcopy').innerText = "You owe:";
         document.getElementById('userowed').innerText = currencySymbol + "0"
         document.getElementById('userowedcopy').classList.remove('green');
@@ -134,6 +134,7 @@ document.getElementById('addexpenseform').addEventListener('submit', e => {
     const value = removeSymbols(document.getElementById('expense-value').value);
     const date = document.getElementById('expense-date').value;
     console.log(value)
+    const timestamp = Date.now();
 
     let splitters = []
     if (document.getElementById('r1').checked) {
@@ -149,7 +150,7 @@ document.getElementById('addexpenseform').addEventListener('submit', e => {
         splitters.push(user)
     }
 
-    const object = {title,value, eventcode: eventCode, paidby: user, splitbetween: splitters, date, type: 'expense'};
+    const object = {title,value, eventcode: eventCode, paidby: user, splitbetween: splitters, date, type: 'expense', updated: timestamp};
     db.collection("expenses").add(object).then((expenseSubmitted(title + ' added')))
 })
 
@@ -226,7 +227,7 @@ const showHistory = () => {
 
         db.collection('expenses')
         .where('eventcode','==',eventCode)
-        .orderBy("date", "desc")
+        .orderBy("date", "desc").orderBy("updated", "desc")
         .onSnapshot(snapshot => {
             snapshot.docChanges().forEach(change => {
                 if (change.type=="added") {
@@ -302,6 +303,8 @@ const splitBeweenSwitch = () => {
 
 //Calculate how to settle up
 const settleup = () => {
+    loadAd();
+
     document.getElementById('summarydiv').classList.add('d-none');
     document.getElementById('howtosettle').classList.remove('d-none');
 
@@ -337,7 +340,7 @@ const settleup = () => {
             transfer = tempOwed[orderedList[0]];
         }
 
-        if (transfer>0) {
+        if (transfer>=1) {
             tempOwed[orderedList[0]] -= transfer;
             tempOwed[orderedList[orderedList.length-1]] += transfer;
             const str = orderedList[0] + ' pays ' + orderedList[orderedList.length-1] + ' ' + currencySymbol + formatNumber(transfer);
@@ -366,8 +369,9 @@ const transferMoney = (from, to, value,count) => {
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const dateStr = yyyy + '-' + mm + '-' + dd;
+    const timestamp = Date.now();
 
-    const object = {title ,value, eventcode: eventCode, paidby: from, splitbetween: [to], date: dateStr, type: 'transfer'};
+    const object = {title ,value, eventcode: eventCode, paidby: from, splitbetween: [to], date: dateStr, type: 'transfer', updated: timestamp};
     db.collection("expenses").add(object).then(
         document.getElementById('transfer'+count).classList.add('strikeout'),
         animateCSS(document.getElementById('transfer'+count),'rubberBand'),
@@ -376,6 +380,7 @@ const transferMoney = (from, to, value,count) => {
 }
 
 const backToSummary = () => {
+    loadAd();
     document.getElementById('summarydiv').classList.remove('d-none');
     document.getElementById('howtosettle').classList.add('d-none');
     loadPeople();

@@ -8,7 +8,20 @@ var firebaseConfig = {
     appId: "1:425130834619:web:af1479d550adf4a502079e",
     measurementId: "G-VXN532BC1J"
 };
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+// const auth = firebase.auth();
 
+
+// const login = () => {
+
+//     firebase.auth().signInWithEmailAndPassword(authUser, authPw).then(function() {
+//         console.log('logged in')
+//     }, function(error) {
+//     // An error happened.
+//         console.log('log in failed')
+//     });
+
+// }

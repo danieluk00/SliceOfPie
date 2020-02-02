@@ -28,19 +28,6 @@ body {
     position:relative;
 }
 
-.btn-primary {
-    background-color: #ffc13b !important;
-}
-
-.main-title {
-    font-size: 66px;
-}
-
-.intro-container {
-    margin-top: 200px;
-    text-align: center;
-}
-
 @media only screen and (max-width: 800px) {
     .intro-container {
         margin-top: 140px;
@@ -73,14 +60,6 @@ h1,h2,h3,h4,label,p {
     display:flex;
     justify-content: center;
     color: white;
-}
-
-#createform {
-    width: 95%;
-}
-
-#namesform {
-    width: 95%;
 }
 
 .person-form {
@@ -117,11 +96,6 @@ h1,h2,h3,h4,label,p {
     margin-right: 4px;
 }
 
-.homebuttons {
-    display: flex;
-    flex-direction: column;
-}
-
 #everyoneorpeople {
     display:flex;
     flex-direction: row;
@@ -154,10 +128,6 @@ h1,h2,h3,h4,label,p {
     color: #ff6060;
 }
 
-#eventcode {
-    word-wrap: break-word;
-    color: #ffc13b;
-}
 @media only screen and (max-width: 800px) {
     #eventcode {
         font-size: 20px;
@@ -228,4 +198,17 @@ h1,h2,h3,h4,label,p {
     display: flex;
     flex-direction: row;
     justify-content: center;
+}
+
+
+.adbar {
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    margin: 10px;
+}
+.adbar a {
+    color: white;
+    text-decoration: underline;
 }

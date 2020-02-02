@@ -12,9 +12,19 @@
         <link rel="stylesheet" href="styles/list.css">
 
     </head>
-    <body onload="loadPeople();">
+    <body onload="loadPeople(); loadAd();">
 
         <div class="container">
+
+            <nav class="navbar navbar-light bg-light adbar">
+                <a id="ad1" class="d-none" target="_blank" href="https://www.amazon.co.uk/b?_encoding=UTF8&tag=danieluk00-21&linkCode=ur2&linkId=892938983a6a599f033ba21bfb811e88&camp=1634&creative=6738&node=1769585031">Don't travel without the right luggage</a><img src="//ir-uk.amazon-adsystem.com/e/ir?t=danieluk00-21&l=ur2&o=2" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+                <a id="ad2" class="d-none" target="_blank" href="https://www.amazon.co.uk/b?_encoding=UTF8&tag=danieluk00-21&linkCode=ur2&linkId=abbe5c3a57daf1410ffcd3b8c8cbee20&camp=1634&creative=6738&node=17489626031">Headphones make journeys better!</a><img src="//ir-uk.amazon-adsystem.com/e/ir?t=danieluk00-21&l=ur2&o=2" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+                <a id="ad3" class="d-none" target="_blank" href="https://www.amazon.co.uk/b?_encoding=UTF8&tag=danieluk00-21&linkCode=ur2&linkId=ad774d82d725c2ef4b9ba5d4ea0f1fe6&camp=1634&creative=6738&node=1342661031">Everything you need for a road trip</a><img src="//ir-uk.amazon-adsystem.com/e/ir?t=danieluk00-21&l=ur2&o=2" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+                <a id="ad4" class="d-none" target="_blank" href="https://www.amazon.co.uk/b?_encoding=UTF8&tag=danieluk00-21&linkCode=ur2&linkId=10052ca8eb6a88e8bc81f67fd528a9a8&camp=1634&creative=6738&node=266239">A book for your journey</a><img src="//ir-uk.amazon-adsystem.com/e/ir?t=danieluk00-21&l=ur2&o=2" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />               
+                <a id="ad5" class="d-none" target="_blank" href="https://www.amazon.co.uk/b?_encoding=UTF8&tag=danieluk00-21&linkCode=ur2&linkId=ef90df67324a7a5b7b916a226074619c&camp=1634&creative=6738&node=595312">Games to play on your trip</a><img src="//ir-uk.amazon-adsystem.com/e/ir?t=danieluk00-21&l=ur2&o=2" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+                <a id="ad6" class="d-none" target="_blank" href="https://www.amazon.co.uk/b?_encoding=UTF8&tag=danieluk00-21&linkCode=ur2&linkId=208aecaf1f63eff9de6b0e86599217fd&camp=1634&creative=6738&node=362355011">Footwear for your walking holiday</a><img src="//ir-uk.amazon-adsystem.com/e/ir?t=danieluk00-21&l=ur2&o=2" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+                <a id="ad7" class="d-none" target="_blank" href="https://www.amazon.co.uk/b?_encoding=UTF8&tag=danieluk00-21&linkCode=ur2&linkId=2e777ebc70e1d73a3f6a1f4cadabede7&camp=1634&creative=6738&node=429892031">Watch a movie on your tablet</a><img src="//ir-uk.amazon-adsystem.com/e/ir?t=danieluk00-21&l=ur2&o=2" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+            </nav>
 
             <ul class="nav nav-pills nav-fill">
                 <li class="nav-item">
@@ -77,7 +87,7 @@
                     </div>
                     <div id="noexpenses">
                         <img id="noexpenseimg" src="assets/blank.png">
-                        <h4 style="margin-top: 20px">Nothing to show</h4>
+                        <h4 style="margin-top: 20px">Nothing to show.</h4>
                     </div>
                 </div>
 
@@ -117,11 +127,11 @@
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-warning btn-block" id="submitexpense" style="margin-bottom:10px" disabled>Save</button>
-                            <a href="#" class="addlink" onclick="navigateAddExpense('transfermoneymain')"><i class="fas fa-arrow-circle-right"></i> Or transfer money to someone</a>
+                            <a href="#" class="addlink" onclick="navigateAddExpense('transfermoneymain')">Or record money transfered between people</a>
                         </form>
                     </div>
                     <div id="transfermoneymain" class="d-none">
-                        <h1>Transfer money</h1>
+                        <h1>Record money transfer</h1>
                         <form id ="transferform">
                             <div id="from-to">
                                 <div class="paidbyuser form-group">
@@ -150,7 +160,7 @@
                                 <input type="date" class="form-control" id="transfer-date" autocomplete="off">
                             </div>
                             <button type="submit" class="btn btn-warning btn-block" id="submittransfer" style="margin-bottom:10px" disabled>Save</button>
-                            <a href="#" class="addlink" onclick="navigateAddExpense('addexpensemain')"><i class="fas fa-pen"></i>  Add expense instead</a>
+                            <a href="#" class="addlink" onclick="navigateAddExpense('addexpensemain')">Add expense instead</a>
                         </form>
                     </div>
                     <div id="addcomplete" class="d-none">
@@ -197,8 +207,8 @@
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-        <script src="https://www.gstatic.com/firebasejs/6.6.0/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/6.6.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-firestore.js"></script>
 
         <script src="scripts/firebase.js"></script>
         <script src="scripts/cookies.js"></script>
@@ -211,6 +221,5 @@
                 window.location.href = "index.html";
             }
         </script>
-    
     </body>
 </html>

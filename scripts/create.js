@@ -1,5 +1,6 @@
-const eventCode = (Math.floor(Math.random() * (9999999 + 1000000))).toString();
+let eventCode = null
 let eventName = null;
+let person1 = null;
 let people = []
 
 const createContainer = document.querySelector('.createcontainer');
@@ -13,9 +14,10 @@ document.getElementById('createform').addEventListener('submit', e => {
     people.push(document.getElementById('person1').value);
     createContainer.classList.add('d-none');
     namesContainer.classList.remove('d-none');
-
-    setCookie(eventCode+'name',document.getElementById('person1').value,365);
+    person1 = document.getElementById('person1').value;
 })
+
+const generateCode = () => (Math.floor(Math.random() * (9999999 + 1000000))).toString();
 
 //Users can enter names
 document.getElementById('namesform').addEventListener('submit', e => {
@@ -37,6 +39,23 @@ document.getElementById('namesform').addEventListener('submit', e => {
     }
 
     const object = {eventName, people, currency: currencySymbol}
+
+    //Generate code and check it hasn't been used before
+    let repeatCode = true;
+    while (repeatCode == true) {
+        repeatCode = false;
+        eventCode = generateCode();
+        db.collection('events').get().then((snapshot) => {
+            snapshot.docs.forEach(doc => {
+                if (doc.id == eventCode) {
+                    repeatCode = true;
+                }
+            })
+        })
+    }
+
+    //Save host user to cookie
+    setCookie(eventCode+'name',person1,365);
 
     //Save to Firebase
     db.collection("events").doc(eventCode).set(object).then(() => {

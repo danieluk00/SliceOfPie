@@ -1,0 +1,35 @@
+.btn-primary {
+    background-color: #ffc13b !important;
+}
+
+.main-title {
+    font-size: 66px;
+}
+
+.intro-container {
+    margin-top: 200px;
+    text-align: center;
+}
+
+input[type="text"]:disabled {
+    background: #ccc;
+  }
+
+
+#eventcode {
+    word-wrap: break-word;
+    color: #ffc13b;
+}
+
+.homebuttons {
+    display: flex;
+    flex-direction: column;
+}
+
+#createform {
+    width: 95%;
+}
+
+#namesform {
+    width: 95%;
+}
