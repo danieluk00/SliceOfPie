@@ -169,6 +169,7 @@ document.getElementById('transferform').addEventListener('submit', e => {
    
     const exchangedValue = exchangeValue(value);
     document.getElementById('transfercurrency').innerText+value;
+    const originalValue = document.getElementById('transfercurrency').innerText+value; 
     const timestamp = Date.now();
     
     const object = {title,value: exchangedValue, eventcode: eventCode, paidby: user, splitbetween: [paidto], date, type: 'transfer', updated: timestamp, originalvalue: originalValue};
@@ -224,7 +225,11 @@ const newTransferInput = () => {
 
 const isNumber = text => !isNaN(removeSymbols(text));
 
-const removeSymbols = text => text.replace(currencySymbol,'');
+const removeSymbols = text => {
+    if (text) {
+        return text.replace('£','').replace('$','').replace('€','');
+    }
+}
 
 //Show history
 const showHistory = () => {
@@ -259,7 +264,7 @@ const showHistory = () => {
                     }
                     let line2copy="";
                     if (removeSymbols(change.doc.data().originalvalue)!=change.doc.data().value && change.doc.data().originalvalue!=null) {
-                        line2copy += `Originally ${change.doc.data().originalvalue}.`
+                        line2copy += `Converted from ${change.doc.data().originalvalue}.`
                     }
                     if (change.doc.data().type=='expense') {
                         if (line2copy!='') {
@@ -279,10 +284,10 @@ const showHistory = () => {
         })
         expenseList.innerHTML += `<ul>`
 
-        if (expenseList.innerHTML=='<ul></ul><ul></ul>') {
-            document.getElementById('noexpenses').classList.remove('d-none');
-        } else {
+        if (expenseList.innerHTML.includes('li')) {
             document.getElementById('noexpenses').classList.add('d-none');
+        } else {
+            document.getElementById('noexpenses').classList.remove('d-none');
         }
         animateCSS(expenseList,'fadeIn');
     })
