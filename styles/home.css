@@ -33,3 +33,10 @@ input[type="text"]:disabled {
 #namesform {
     width: 95%;
 }
+
+.maincurrencydiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: white;
+}

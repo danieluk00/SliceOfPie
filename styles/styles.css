@@ -15,7 +15,7 @@ body {
     max-width: 600px;
     margin-left: 20px;
     margin-right: 20px;
-    min-width: 350px;
+    min-width: 320px;
 }
 
 .share-container {
@@ -134,13 +134,6 @@ h1,h2,h3,h4,label,p {
     }
 }
 
-.currencydiv {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    color: white;
-}
-
 .currencyradio, .splitradio {
     margin-left: 10px;
     margin-right: 2px;
@@ -206,9 +199,21 @@ h1,h2,h3,h4,label,p {
     display: flex;
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.4) !important;
-    margin: 10px;
+    margin: 10px 0px;
 }
 .adbar a {
     color: white;
     text-decoration: underline;
+}
+
+.currencydiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+}
+
+.currencydropdown {
+    margin-right: 10px;
+    margin-left: 0px !important;
+    width: 50px;
 }

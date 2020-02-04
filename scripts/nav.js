@@ -32,6 +32,8 @@ const clickMenu = clicked => {
         document.getElementById('r1').checked = true;
         document.getElementById('submittransfer').disabled = true;
         document.getElementById('people').classList.add('d-none');
+        document.getElementById('transfercurrency').innerText = currencySymbol;
+        document.getElementById('expensecurrency').innerText = currencySymbol;
         animateCSS(document.getElementById('addexpense'),'fadeIn');
 
     } else if (clicked==='historymenu') {
@@ -51,9 +53,7 @@ const settings = () => {
 }
 
 const closeOverlay = () => document.getElementById('overlay').classList.add('d-none');
-
 const closeInfoOverlay = () => document.getElementById('infooverlay').classList.add('d-none');
-
 const closeErrorOverlay = () => document.getElementById('erroroverlay').classList.add('d-none');
 
 const showError = error => {

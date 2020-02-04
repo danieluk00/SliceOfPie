@@ -10,14 +10,15 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
         <link rel="stylesheet" href="styles/styles.css">
         <link rel="stylesheet" href="styles/list.css">
+        <link rel="stylesheet" href="styles/home.css">
 
     </head>
-    <body onload="loadPeople(); loadAd();">
+    <body onload="loadPeople(); loadAd(); loadExchange()">
 
         <div class="container">
 
             <nav class="navbar navbar-light bg-light adbar">
-                <a id="ad1" class="d-none" target="_blank" href="https://www.amazon.co.uk/b?_encoding=UTF8&tag=danieluk00-21&linkCode=ur2&linkId=892938983a6a599f033ba21bfb811e88&camp=1634&creative=6738&node=1769585031">Don't travel without the right luggage</a><img src="//ir-uk.amazon-adsystem.com/e/ir?t=danieluk00-21&l=ur2&o=2" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+                <a id="ad1" class="d-none" target="_blank" href="https://www.amazon.co.uk/b?_encoding=UTF8&tag=danieluk00-21&linkCode=ur2&linkId=892938983a6a599f033ba21bfb811e88&camp=1634&creative=6738&node=1769585031">Don't travel without luggage!</a><img src="//ir-uk.amazon-adsystem.com/e/ir?t=danieluk00-21&l=ur2&o=2" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
                 <a id="ad2" class="d-none" target="_blank" href="https://www.amazon.co.uk/b?_encoding=UTF8&tag=danieluk00-21&linkCode=ur2&linkId=abbe5c3a57daf1410ffcd3b8c8cbee20&camp=1634&creative=6738&node=17489626031">Headphones make journeys better!</a><img src="//ir-uk.amazon-adsystem.com/e/ir?t=danieluk00-21&l=ur2&o=2" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
                 <a id="ad3" class="d-none" target="_blank" href="https://www.amazon.co.uk/b?_encoding=UTF8&tag=danieluk00-21&linkCode=ur2&linkId=ad774d82d725c2ef4b9ba5d4ea0f1fe6&camp=1634&creative=6738&node=1342661031">Everything you need for a road trip</a><img src="//ir-uk.amazon-adsystem.com/e/ir?t=danieluk00-21&l=ur2&o=2" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
                 <a id="ad4" class="d-none" target="_blank" href="https://www.amazon.co.uk/b?_encoding=UTF8&tag=danieluk00-21&linkCode=ur2&linkId=10052ca8eb6a88e8bc81f67fd528a9a8&camp=1634&creative=6738&node=266239">A book for your journey</a><img src="//ir-uk.amazon-adsystem.com/e/ir?t=danieluk00-21&l=ur2&o=2" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />               
@@ -99,10 +100,18 @@
                                 <label for="formGroupExampleInput">Title</label>
                                 <input type="text" class="form-control" id="expense-title" placeholder="e.g. Train tickets" autocomplete="off">
                             </div>
-                            <div class="form-group">
                                 <label id="valueinlabel" for="formGroupExampleInput2">Value</label>
-                                <input type="text" class="form-control" id="expense-value" autocomplete="off">
-                            </div>
+                                <div class="form-group currencydiv">
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle currencydropdown" id="expensecurrency" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">£</button>
+                                        <div class="dropdown-menu" id="expensecurrencyselect" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#" onclick="switchCurrency('£')">£</a>
+                                            <a class="dropdown-item" href="#" onclick="switchCurrency('$')">$</a>
+                                            <a class="dropdown-item" href="#" onclick="switchCurrency('€')">€</a>
+                                        </div>
+                                      </div>
+                                    <input type="text" class="form-control" id="expense-value" autocomplete="off">
+                                </div>
                             <div class="form-group">
                                 <label for="formGroupExampleInput2">Date</label>
                                 <input type="date" class="form-control" id="expense-date" autocomplete="off">
@@ -127,11 +136,11 @@
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-warning btn-block" id="submitexpense" style="margin-bottom:10px" disabled>Save</button>
-                            <a href="#" class="addlink" onclick="navigateAddExpense('transfermoneymain')">Or record money transfered between people</a>
+                            <a href="#" class="addlink" onclick="navigateAddExpense('transfermoneymain')">Or transfer money</a>
                         </form>
                     </div>
                     <div id="transfermoneymain" class="d-none">
-                        <h1>Record money transfer</h1>
+                        <h1>Transfer money</h1>
                         <form id ="transferform">
                             <div id="from-to">
                                 <div class="paidbyuser form-group">
@@ -151,8 +160,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label id="transfervalueinlabel" for="formGroupExampleInput2">Value</label>
+                            <label id="transfervalueinlabel" for="formGroupExampleInput2">Value</label>
+                            <div class="form-group currencydiv">
+                                <div class="dropdown">
+                                    <button class="btn dropdown-toggle currencydropdown" id="transfercurrency" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">£</button>
+                                    <div class="dropdown-menu" id="transfercurrencyselect" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="#" onclick="switchCurrency('£')">£</a>
+                                        <a class="dropdown-item" href="#" onclick="switchCurrency('$')">$</a>
+                                        <a class="dropdown-item" href="#" onclick="switchCurrency('€')">€</a>
+                                    </div>
+                                  </div>
                                 <input type="text" class="form-control" id="transfer-value" autocomplete="off">
                             </div>
                             <div class="form-group">
@@ -215,6 +232,7 @@
         <script src="scripts/share.js"></script>
         <script src="scripts/nav.js"></script>
         <script src="scripts/app.js"></script>
+        <script src="scripts/exchange.js"></script>
 
         <script>
             if (!new URLSearchParams(window.location.search).get('event')) {

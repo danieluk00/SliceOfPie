@@ -9,6 +9,8 @@ let totalOwed = {};
 let groupTotal = 0;
 let eventName = null;
 let currencySymbol = '£';
+let euroToDollar=1.1;
+let euroToPound=0.85;
 
 //Load state of play total
 const loadPeople = () => {
@@ -150,7 +152,10 @@ document.getElementById('addexpenseform').addEventListener('submit', e => {
         splitters.push(user)
     }
 
-    const object = {title,value, eventcode: eventCode, paidby: user, splitbetween: splitters, date, type: 'expense', updated: timestamp};
+    const exchangedValue = exchangeValue(value);
+    const originalValue = document.getElementById('transfercurrency').innerText+value; 
+    
+    const object = {title,value: exchangedValue, eventcode: eventCode, paidby: user, splitbetween: splitters, date, type: 'expense', updated: timestamp, originalvalue: originalValue};
     db.collection("expenses").add(object).then((expenseSubmitted(title + ' added')))
 })
 
@@ -161,8 +166,12 @@ document.getElementById('transferform').addEventListener('submit', e => {
     const date = document.getElementById('transfer-date').value;
     const paidto = document.getElementById('dropDownTransferTo').innerText;
     const title = `${user} paid ${paidto}`;
+   
+    const exchangedValue = exchangeValue(value);
+    document.getElementById('transfercurrency').innerText+value;
+    const timestamp = Date.now();
     
-    const object = {title,value, eventcode: eventCode, paidby: user, splitbetween: [paidto], date, type: 'transfer'};
+    const object = {title,value: exchangedValue, eventcode: eventCode, paidby: user, splitbetween: [paidto], date, type: 'transfer', updated: timestamp, originalvalue: originalValue};
     db.collection("expenses").add(object).then((expenseSubmitted(title)))
 })
 
@@ -249,8 +258,14 @@ const showHistory = () => {
                         usedBy = usedBy.substring(0,usedBy.length-2);
                     }
                     let line2copy="";
+                    if (removeSymbols(change.doc.data().originalvalue)!=change.doc.data().value && change.doc.data().originalvalue!=null) {
+                        line2copy += `Originally ${change.doc.data().originalvalue}.`
+                    }
                     if (change.doc.data().type=='expense') {
-                        line2copy = `Paid by ${change.doc.data().paidby}. ${usedBy}.`
+                        if (line2copy!='') {
+                            line2copy+=' ';
+                        }
+                        line2copy += `Paid by ${change.doc.data().paidby}. ${usedBy}.`
                     }
                     count++;
                     expenseList.innerHTML += `<li class="list-group-item list-expense-item" id="expense${count}">
@@ -427,9 +442,8 @@ function animateCSS(element, animationName, hide, callback) {
 const updateCurrency = () => {
     // document.getElementById('valueinlabel').innerText = 'Value in ' + currencySymbol
     // document.getElementById('transfervalueinlabel').innerText = 'Value in ' + currencySymbol
-    document.getElementById('expense-value').placeholder = currencySymbol
-    document.getElementById('transfer-value').placeholder = currencySymbol
-    
+    //document.getElementById('expense-value').placeholder = currencySymbol
+    //document.getElementById('transfer-value').placeholder = currencySymbol
 };
 
 const showInfo = (title, paidBy, usedBy, date, value) => {
