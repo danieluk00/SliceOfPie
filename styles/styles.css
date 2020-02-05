@@ -23,7 +23,7 @@ body {
 }
 
 .body-container {
-    margin-top: 20px;
+    margin-top: 10px;
     text-align: center;
     position:relative;
 }
@@ -193,16 +193,15 @@ h1,h2,h3,h4,label,p {
     justify-content: center;
 }
 
-
 .adbar {
     border-radius: 20px;
     display: flex;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.4) !important;
+    background-color: rgba(255, 255, 255, 0.4) !important;
     margin: 10px 0px;
 }
 .adbar a {
-    color: white;
+    color: black;
     text-decoration: underline;
 }
 
@@ -216,4 +215,16 @@ h1,h2,h3,h4,label,p {
     margin-right: 10px;
     margin-left: 0px !important;
     width: 50px;
+}
+
+.carddiv {
+    background-color:rgba(0, 0, 0, 0.4);
+    padding: 20px;
+    border-radius: 6px;
+    min-height: 80%;
+    box-shadow: 0 4px 8px 0 rgba(255,255,255,0.4);
+}
+
+.btn-warning {
+    background-color: #ffc13b !important;
 }
