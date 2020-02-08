@@ -1,3 +1,4 @@
+
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -13,7 +14,7 @@
         <link rel="stylesheet" href="styles/home.css">
 
     </head>
-    <body onload="loadPeople(); loadAd(); loadExchange()">
+    <body onload="signIn(); loadPeople(); loadAd(); loadExchange()">
 
         <div class="container">
 
@@ -57,7 +58,7 @@
                             </div>
                         </div>
                         <div class="statediv0 statediv d-none">
-                            <h4>Group total spend:</h4>
+                            <h4>Group total:</h4>
                             <h1 id="grouptotal">TBC</h1>
                         </div>
                         <div class="statediv1 statediv d-none">
@@ -154,7 +155,7 @@
                                 <div class="paidbyuser form-group" style="padding-left: 10px">
                                     To
                                     <div class="dropdown">
-                                        <button class="btn dropdown-toggle" id="dropDownTransferTo" style="margin-left: 10px" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select user</button>
+                                        <button class="btn dropdown-toggle" id="dropDownTransferTo" style="margin-left: 10px" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Recipient</button>
                                         <div class="dropdown-menu" id="transferto" aria-labelledby="dropdownMenuButton">
                                         </div>
                                     </div>
@@ -224,8 +225,10 @@
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-        <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.8.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.8.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.8.1/firebase-firestore.js"></script>
+
 
         <script src="scripts/firebase.js"></script>
         <script src="scripts/cookies.js"></script>

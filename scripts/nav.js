@@ -72,7 +72,7 @@ const navigateAddExpense = elementToShow => {
     if (elementToShow=='transfermoneymain') {
         document.getElementById('transfer-date').valueAsDate = new Date();
         document.getElementById('transfer-value').value="";
-        document.getElementById('dropDownTransferTo').innerText="Select user";
+        document.getElementById('dropDownTransferTo').innerText="Recipient";
         document.getElementById('submittransfer').disabled = true;
     }
 }

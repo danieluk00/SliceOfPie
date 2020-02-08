@@ -131,6 +131,7 @@ const formatNumber = number => Number.isInteger(parseFloat(number)) ? number : p
 
 //Add an expense
 document.getElementById('addexpenseform').addEventListener('submit', e => {
+
     e.preventDefault();
     const title = document.getElementById('expense-title').value;
     const value = removeSymbols(document.getElementById('expense-value').value);
@@ -155,8 +156,14 @@ document.getElementById('addexpenseform').addEventListener('submit', e => {
     const exchangedValue = exchangeValue(value);
     const originalValue = document.getElementById('transfercurrency').innerText+value; 
     
-    const object = {title,value: exchangedValue, eventcode: eventCode, paidby: user, splitbetween: splitters, date, type: 'expense', updated: timestamp, originalvalue: originalValue};
-    db.collection("expenses").add(object).then((expenseSubmitted(title + ' added')))
+    const object = {title,value: exchangedValue, eventcode: eventCode, paidby: user, splitbetween: splitters, date, type: 'expense', updated: timestamp, originalvalue: originalValue, uid};
+
+
+    if (user) {
+        db.collection("expenses").add(object).then((expenseSubmitted(title + ' added')));
+    } else {
+        showError("Can't access the database");
+    }
 })
 
 //Transfer money
@@ -172,8 +179,13 @@ document.getElementById('transferform').addEventListener('submit', e => {
     const originalValue = document.getElementById('transfercurrency').innerText+value; 
     const timestamp = Date.now();
     
-    const object = {title,value: exchangedValue, eventcode: eventCode, paidby: user, splitbetween: [paidto], date, type: 'transfer', updated: timestamp, originalvalue: originalValue};
-    db.collection("expenses").add(object).then((expenseSubmitted(title)))
+    const object = {title,value: exchangedValue, eventcode: eventCode, paidby: user, splitbetween: [paidto], date, type: 'transfer', updated: timestamp, originalvalue: originalValue, uid};
+
+    if (user) {
+        db.collection("expenses").add(object).then((expenseSubmitted(title)));
+    } else {
+        showError("Can't access the database");
+    }
 })
 
 
@@ -216,7 +228,7 @@ document.getElementById('transferfrom').addEventListener('onclick', e => newTran
 document.getElementById('transferto').addEventListener('onclick', e => newTransferInput())
 
 const newTransferInput = () => {
-    if (document.getElementById('transfer-value').value!="" && isNumber(document.getElementById('transfer-value').value) && document.getElementById('dropDownTransferFrom').innerText!='Select user' && document.getElementById('dropDownTransferTo').innerText!='Select user' && document.getElementById('dropDownTransferFrom').innerText!=document.getElementById('dropDownTransferTo').innerText) {
+    if (document.getElementById('transfer-value').value!="" && isNumber(document.getElementById('transfer-value').value) && document.getElementById('dropDownTransferFrom').innerText!='Select user' && document.getElementById('dropDownTransferTo').innerText!='Recipient' && document.getElementById('dropDownTransferFrom').innerText!=document.getElementById('dropDownTransferTo').innerText) {
         document.getElementById('submittransfer').disabled = false;
     } else {
         document.getElementById('submittransfer').disabled = true;
@@ -272,11 +284,14 @@ const showHistory = () => {
                         }
                         line2copy += `Paid by ${change.doc.data().paidby}. ${usedBy}.`
                     }
+
+                    const trashHidden = change.doc.data().uid==uid ? '' : 'd-none';
+
                     count++;
                     expenseList.innerHTML += `<li class="list-group-item list-expense-item" id="expense${count}">
                                                 <div class="justify-content-between align-items-center d-flex">
                                                     <span class="flex-fill font-weight-light">${change.doc.data().title} - ${currencySymbol}${formatNumber(change.doc.data().value)}</span>
-                                                    <i class="far fa-trash-alt delete" title="Delete" onclick="deleteExpense('${change.doc.id}','${change.doc.data().title}','${count}')"></i>
+                                                    <i class="far fa-trash-alt delete ${trashHidden}" title="Delete" onclick="deleteExpense('${change.doc.id}','${change.doc.data().title}','${count}')"></i>
                                                 </div>
                                                 <div class="list-subtext">${line2copy}<div>
                                             </li>`
@@ -391,7 +406,7 @@ const transferMoney = (from, to, value,count) => {
     const dateStr = yyyy + '-' + mm + '-' + dd;
     const timestamp = Date.now();
 
-    const object = {title ,value, eventcode: eventCode, paidby: from, splitbetween: [to], date: dateStr, type: 'transfer', updated: timestamp};
+    const object = {title ,value, eventcode: eventCode, paidby: from, splitbetween: [to], date: dateStr, type: 'transfer', updated: timestamp, uid};
     db.collection("expenses").add(object).then(
         document.getElementById('transfer'+count).classList.add('strikeout'),
         animateCSS(document.getElementById('transfer'+count),'rubberBand'),
@@ -452,7 +467,6 @@ const updateCurrency = () => {
 };
 
 const showInfo = (title, paidBy, usedBy, date, value) => {
-    console.log('ba')
 
     document.getElementById('infooverlay').classList.remove('d-none');
     document.getElementById('infotitle').innerText = title;
