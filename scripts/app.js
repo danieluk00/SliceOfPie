@@ -116,6 +116,8 @@ const showStateOfPlay = () => {
         document.getElementById('userowed').classList.remove('red');
     }
 
+    pieChart(groupTotal,totalSpent[user],totalReceived[user]);
+
     isNaN(groupTotal) ? document.querySelector('.statediv0').classList.add('d-none') : document.querySelector('.statediv0').classList.remove('d-none');
     isNaN(totalReceived[user]) ? document.querySelector('.statediv1').classList.add('d-none') : document.querySelector('.statediv1').classList.remove('d-none');
     isNaN(totalSpent[user]) ? document.querySelector('.statediv2').classList.add('d-none') : document.querySelector('.statediv2').classList.remove('d-none');
@@ -125,6 +127,9 @@ const showStateOfPlay = () => {
     animateCSS(document.querySelector('.statediv1'),'rubberBand');
     animateCSS(document.querySelector('.statediv2'),'rubberBand');
     animateCSS(document.querySelector('.statediv3'),'rubberBand');
+
+    animateCSS(document.getElementById('piechart'),'pulse');
+
 }
 
 const formatNumber = number => Number.isInteger(parseFloat(number)) ? number : parseFloat(number).toFixed(2);
@@ -136,7 +141,6 @@ document.getElementById('addexpenseform').addEventListener('submit', e => {
     const title = document.getElementById('expense-title').value;
     const value = removeSymbols(document.getElementById('expense-value').value);
     const date = document.getElementById('expense-date').value;
-    console.log(value)
     const timestamp = Date.now();
 
     let splitters = []
@@ -249,6 +253,8 @@ const showHistory = () => {
     let count = 0;
     const expenseList = document.getElementById('expense-list');
 
+        let totals = {};
+
         expenseList.innerHTML = `<ul>`
 
         db.collection('expenses')
@@ -262,6 +268,14 @@ const showHistory = () => {
                         const displayDate = formatDate(lastDateShown);
                         expenseList.innerHTML += `<p class="listdate">${displayDate}</p>`
                     }
+                    if (change.doc.data().type=="expense") {
+                        if (totals[formatDate(change.doc.data().date)]) {
+                            totals[formatDate(change.doc.data().date)] += change.doc.data().value;
+                        } else {
+                            totals[formatDate(change.doc.data().date)] = change.doc.data().value;
+                        }
+                    }
+
                     let usedBy = 'For everyone';
                     if (change.doc.data().splitbetween.length == 1) {
                         usedBy = 'For ' + change.doc.data().splitbetween[0]
@@ -305,10 +319,9 @@ const showHistory = () => {
             document.getElementById('noexpenses').classList.remove('d-none');
         }
         animateCSS(expenseList,'fadeIn');
+        barChart(totals);
     })
 }
-
-/* <i class="fas fa-info-circle info" onclick="showInfo('${change.doc.data().title}','${change.doc.data().paidby}','${usedBy}','${change.doc.data().date}','${change.doc.data().value}')"</i> */
 
 //Delete expense
 const deleteExpense = (id, title, count) => {
@@ -476,3 +489,81 @@ const showInfo = (title, paidBy, usedBy, date, value) => {
 }
 
 const formatDate = date => new Date(date).toLocaleDateString("en-GB", { weekday: 'short', day: 'numeric', month: 'short' });
+
+const pieChart = (total, paid, received) => {
+
+    const rest = total - paid - received;
+
+    //document.getElementById('piechart').classList.add('d-none');
+    //document.getElementById('piechartsmall').classList.add('d-none');
+    if (paid==0 || received == 0) {
+        document.getElementById('piechart').classList.add('d-none');
+    } else {
+        document.getElementById('piechart').classList.remove('d-none');
+    }
+
+    let data = {
+        series: [received, paid],
+        labels: ['Received', 'Paid'],
+    }
+
+    const options = {
+        donut: false
+    };
+
+    new Chartist.Pie('#piechart', data, options);
+   
+}
+
+const barChart = object => {
+    var newObject = {};
+    var keys = [];
+
+    let dates=['Start'];
+    let sum=[0];
+
+    for (var key in object) {
+        keys.push(key);
+    }
+
+    for (var i = keys.length - 1; i >= 0; i--) {
+        var value = parseInt(object[keys[i]]);
+        newObject[keys[i]]= value;
+
+        dates.push(keys[i].substring(0,3))
+        sum.push(value)
+    }       
+
+    let runningTotal = sum[0];
+    for (let i=1; i<=keys.length; i++) {
+        runningTotal+=sum[i];
+        sum[i] = runningTotal;
+    }
+
+    let data = {
+        labels: dates,
+        series: [sum]
+    }
+
+    const options = {
+        fullWidth: true,
+        chartPadding: {
+            right: 25
+          },lineSmooth: Chartist.Interpolation.simple({
+            divisor: 2
+          }),
+          low: 0,
+          axisY: {
+            onlyInteger: true,
+          }
+    };
+
+    if (dates.length<2) {
+        document.getElementById('barchart').classList.add('d-none');
+    } else {
+        document.getElementById('barchart').classList.remove('d-none');
+    }
+
+    new Chartist.Line('#barchart', data, options);
+    
+}

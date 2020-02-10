@@ -20,7 +20,7 @@ const switchCurrency = symbol => {
 
 const exchangeValue = value => {
     const selectedCurrency = document.getElementById('expensecurrency').innerText;
-    value = parseInt(value);
+    value = parseFloat(value);
 
     if (currencySymbol==selectedCurrency) {
         return value;

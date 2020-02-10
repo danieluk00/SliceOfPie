@@ -39,6 +39,7 @@ const clickMenu = clicked => {
     } else if (clicked==='historymenu') {
         document.getElementById('history').classList.remove('d-none');
         animateCSS(document.getElementById('history'),'fadeIn');
+        animateCSS(document.getElementById('barchart'), 'fadeIn');
         showHistory();
     }
 }

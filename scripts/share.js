@@ -1,6 +1,5 @@
 //Share URL
 document.getElementById('copyurl').addEventListener('submit', e => {
-    console.log('ab')
     e.preventDefault();
 
     const el = document.createElement('textarea');
