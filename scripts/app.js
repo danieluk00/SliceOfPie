@@ -431,6 +431,7 @@ const backToSummary = () => {
     loadAd();
     document.getElementById('summarydiv').classList.remove('d-none');
     document.getElementById('howtosettle').classList.add('d-none');
+    document.getElementById('piechartdiv').classList.add('d-none');
     loadPeople();
 }
 
@@ -492,27 +493,24 @@ const formatDate = date => new Date(date).toLocaleDateString("en-GB", { weekday:
 
 const pieChart = (total, paid, received) => {
 
-    const rest = total - paid - received;
-
-    //document.getElementById('piechart').classList.add('d-none');
-    //document.getElementById('piechartsmall').classList.add('d-none');
-    if (paid==0 || received == 0) {
+    if (paid==0 || received == 0 || user==null) {
         document.getElementById('piechart').classList.add('d-none');
+        document.getElementById('piechartdiv').classList.add('d-none');
     } else {
         document.getElementById('piechart').classList.remove('d-none');
+        document.getElementById('piechartdiv').classList.remove('d-none');
+
+        let data = {
+            series: [received, paid],
+            labels: ['Received', 'Paid'],
+        }
+    
+        const options = {
+            donut: false
+        };
+    
+        new Chartist.Pie('#piechart', data, options);
     }
-
-    let data = {
-        series: [received, paid],
-        labels: ['Received', 'Paid'],
-    }
-
-    const options = {
-        donut: false
-    };
-
-    new Chartist.Pie('#piechart', data, options);
-   
 }
 
 const barChart = object => {
@@ -562,8 +560,7 @@ const barChart = object => {
         document.getElementById('barchart').classList.add('d-none');
     } else {
         document.getElementById('barchart').classList.remove('d-none');
+        new Chartist.Line('#barchart', data, options);
     }
-
-    new Chartist.Line('#barchart', data, options);
     
 }
