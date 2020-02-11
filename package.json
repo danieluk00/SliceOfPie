@@ -1,0 +1,24 @@
+{
+  "name": "sliceofpie",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "chart.js": "^2.9.3",
+    "firebase-functions": "^3.3.0",
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danieluk00/SliceOfPie.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danieluk00/SliceOfPie/issues"
+  },
+  "homepage": "https://github.com/danieluk00/SliceOfPie#readme"
+}

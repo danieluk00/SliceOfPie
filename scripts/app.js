@@ -116,7 +116,7 @@ const showStateOfPlay = () => {
         document.getElementById('userowed').classList.remove('red');
     }
 
-    pieChart(groupTotal,totalSpent[user],totalReceived[user]);
+    //pieChart(groupTotal,totalSpent[user],totalReceived[user]);
 
     isNaN(groupTotal) ? document.querySelector('.statediv0').classList.add('d-none') : document.querySelector('.statediv0').classList.remove('d-none');
     isNaN(totalReceived[user]) ? document.querySelector('.statediv1').classList.add('d-none') : document.querySelector('.statediv1').classList.remove('d-none');
@@ -552,9 +552,7 @@ const barChart = object => {
         fullWidth: true,
         chartPadding: {
             right: 25
-          },lineSmooth: Chartist.Interpolation.simple({
-            divisor: 2
-          }),
+          },
           low: 0,
           axisY: {
             onlyInteger: true,
