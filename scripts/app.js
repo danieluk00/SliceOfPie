@@ -94,21 +94,21 @@ const showStateOfPlay = () => {
     document.getElementById('grouptotal').innerText = currencySymbol + formatNumber(groupTotal);
 
     if (totalOwed[user]<1 && totalOwed[user]>-1) {
-        document.getElementById('userowedcopy').innerText = "You owe:";
+        document.getElementById('userowedcopy').innerHTML = `<i class="fas fa-calculator"></i> You owe:`;
         document.getElementById('userowed').innerText = currencySymbol + "0"
         document.getElementById('userowedcopy').classList.remove('green');
         document.getElementById('userowed').classList.remove('green');
         document.getElementById('userowedcopy').classList.remove('red');
         document.getElementById('userowed').classList.remove('red');
     } else if (totalOwed[user]>=0) {
-        document.getElementById('userowedcopy').innerText = "You owe:";
+        document.getElementById('userowedcopy').innerHTML = `<i class="fas fa-calculator"></i> You owe:`;
         document.getElementById('userowed').innerText = currencySymbol + formatNumber(totalOwed[user]);
         document.getElementById('userowedcopy').classList.add('red');
         document.getElementById('userowed').classList.add('red');
         document.getElementById('userowedcopy').classList.remove('green');
         document.getElementById('userowed').classList.remove('green');
     } else {
-        document.getElementById('userowedcopy').innerText = "You are owed:";
+        document.getElementById('userowedcopy').innerHTML = `<i class="fas fa-calculator"></i> You are owed:`;
         document.getElementById('userowed').innerText = currencySymbol + formatNumber(-1 * totalOwed[user]);
         document.getElementById('userowedcopy').classList.add('green');
         document.getElementById('userowed').classList.add('green');
