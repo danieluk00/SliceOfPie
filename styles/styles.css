@@ -50,6 +50,10 @@ h1,h2,h3,h4,label,p {
     color: white;
 }
 
+.nav {
+    margin-top: 20px;
+}
+
 .nav-link {
     color: #ffc13b;
 }

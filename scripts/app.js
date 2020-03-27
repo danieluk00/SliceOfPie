@@ -128,7 +128,7 @@ const showStateOfPlay = () => {
     animateCSS(document.querySelector('.statediv2'),'rubberBand');
     animateCSS(document.querySelector('.statediv3'),'rubberBand');
 
-    animateCSS(document.getElementById('piechart'),'pulse');
+    //animateCSS(document.getElementById('piechart'),'pulse');
 
 }
 
@@ -351,7 +351,7 @@ const splitBeweenSwitch = () => {
 
 //Calculate how to settle up
 const settleup = () => {
-    loadAd();
+    //loadAd();
 
     document.getElementById('summarydiv').classList.add('d-none');
     document.getElementById('howtosettle').classList.remove('d-none');
@@ -428,10 +428,10 @@ const transferMoney = (from, to, value,count) => {
 }
 
 const backToSummary = () => {
-    loadAd();
+    //loadAd();
     document.getElementById('summarydiv').classList.remove('d-none');
     document.getElementById('howtosettle').classList.add('d-none');
-    document.getElementById('piechartdiv').classList.add('d-none');
+    //document.getElementById('piechartdiv').classList.add('d-none');
     loadPeople();
 }
 

@@ -12,7 +12,7 @@ const clickMenu = clicked => {
     document.getElementById('addexpense').classList.add('d-none');
     document.getElementById('history').classList.add('d-none');
 
-    loadAd();
+    //loadAd();
 
     //Show clicked on page element
     if (clicked==='statemenu') {
@@ -63,7 +63,7 @@ const showError = error => {
 }
 
 const navigateAddExpense = elementToShow => {
-    loadAd();
+    //loadAd();
 
     document.getElementById('transfermoneymain').classList.add('d-none');
     document.getElementById('addexpensemain').classList.add('d-none');
@@ -78,14 +78,14 @@ const navigateAddExpense = elementToShow => {
     }
 }
 
-const loadAd = () => {
-    const adTotal = 7;
-    //Hide all ads
-    for (let i=1; i<=adTotal; i++) {
-        document.getElementById('ad'+i).classList.add('d-none');
-    }
-    //Show random ad
-    const adNum = parseInt(Math.floor(Math.random() * (adTotal-1 + 0))) + 1;
-    document.getElementById('ad'+adNum).classList.remove('d-none');
-    animateCSS(document.getElementById('ad'+adNum),'fadeIn');
-}
+// const loadAd = () => {
+//     const adTotal = 7;
+//     //Hide all ads
+//     for (let i=1; i<=adTotal; i++) {
+//         document.getElementById('ad'+i).classList.add('d-none');
+//     }
+//     //Show random ad
+//     const adNum = parseInt(Math.floor(Math.random() * (adTotal-1 + 0))) + 1;
+//     document.getElementById('ad'+adNum).classList.remove('d-none');
+//     animateCSS(document.getElementById('ad'+adNum),'fadeIn');
+// }
