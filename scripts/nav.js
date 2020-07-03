@@ -12,7 +12,7 @@ const clickMenu = clicked => {
     document.getElementById('addexpense').classList.add('d-none');
     document.getElementById('history').classList.add('d-none');
 
-    //loadAd();
+    loadAd();
 
     //Show clicked on page element
     if (clicked==='statemenu') {
@@ -63,7 +63,7 @@ const showError = error => {
 }
 
 const navigateAddExpense = elementToShow => {
-    //loadAd();
+    loadAd();
 
     document.getElementById('transfermoneymain').classList.add('d-none');
     document.getElementById('addexpensemain').classList.add('d-none');
@@ -78,14 +78,31 @@ const navigateAddExpense = elementToShow => {
     }
 }
 
-// const loadAd = () => {
-//     const adTotal = 7;
-//     //Hide all ads
-//     for (let i=1; i<=adTotal; i++) {
-//         document.getElementById('ad'+i).classList.add('d-none');
-//     }
-//     //Show random ad
-//     const adNum = parseInt(Math.floor(Math.random() * (adTotal-1 + 0))) + 1;
-//     document.getElementById('ad'+adNum).classList.remove('d-none');
-//     animateCSS(document.getElementById('ad'+adNum),'fadeIn');
-// }
+const loadAd = () => {
+    const adNumber = getRandomInt(1,8);
+    const adDiv = document.querySelector('.ad');
+
+    if (adNumber==1) {
+        adDiv.innerHTML = `<iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=42&l=ur1&category=gift_certificates&banner=0WRPA8EXP4PMWMQK5VG2&f=ifr&linkID=5493a8f3d73f23cb4b935c506250fd69&t=danieluk00-21&tracking_id=danieluk00-21" width="234" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>`
+    } else if (adNumber==2) {
+        adDiv.innerHTML = `<iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=42&l=ur1&category=fresh&banner=1RWWXBFHQ6ASNPYQ6DG2&f=ifr&linkID=68a8671bbd392640143ec2469c9ee7fc&t=danieluk00-21&tracking_id=danieluk00-21" width="234" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>`
+    } else if (adNumber==3) {
+        adDiv.innerHTML = `<iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=42&l=ez&f=ifr&linkID=3b45126dbb360c8d566897627594f695&t=danieluk00-21&tracking_id=danieluk00-21" width="234" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>`
+    } else if (adNumber==4) {
+        adDiv.innerHTML = `<iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=288&l=ur1&category=piv&banner=14ZQRPDZB4WWG3CQ3782&f=ifr&linkID=7baec759245a2fae16ee5713f39cca89&t=danieluk00-21&tracking_id=danieluk00-21" width="320" height="50" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>`
+    } else if (adNumber==5) {
+        adDiv.innerHTML = `<iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=42&l=ur1&category=amazon_student&banner=0J4KQS4Z1HXSVRFFT382&f=ifr&linkID=9a44b092727de9d0411a6d551841cf79&t=danieluk00-21&tracking_id=danieluk00-21" width="234" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>`
+    } else if (adNumber==6) {
+        adDiv.innerHTML = `<iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=288&l=ur1&category=audible&banner=0X48M2QCH8NRZBVFW4G2&f=ifr&linkID=0011494ad012b0e8b006e2d1001e8cdf&t=danieluk00-21&tracking_id=danieluk00-21" width="320" height="50" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>`
+    } else if (adNumber==7) {
+        adDiv.innerHTML = `<iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=42&l=ur1&category=wedding_registry&banner=10D3YP8P7NXHEJGMZ7R2&f=ifr&linkID=426cfa1969a5bf37f49670993b2e1173&t=danieluk00-21&tracking_id=danieluk00-21" width="234" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>`
+    } else if (adNumber==8) {
+        adDiv.innerHTML = `<iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=42&l=ur1&category=kindle_unlimited&banner=0B0Q1HMPRKFTDDERDS02&f=ifr&linkID=eb63932100cd4e20c9233488bc647c18&t=danieluk00-21&tracking_id=danieluk00-21" width="234" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>`
+    }
+}
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
